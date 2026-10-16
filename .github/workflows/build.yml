@@ -48,7 +48,16 @@ jobs:
 
       - name: Build libhevtun (tun2socks)
         if: steps.hevtun-cache.outputs.cache-hit != 'true'
-        run: bash compile-hevtun.sh
+        run: |
+          mkdir -p diag
+          git submodule status --recursive > diag/submodules.txt 2>&1 || true
+          for i in 1 2; do
+            if bash compile-hevtun.sh > diag/hevtun.log 2>&1; then exit 0; fi
+            echo "intento $i fallido"; git submodule update --init --recursive --force >> diag/submodules.txt 2>&1 || true
+          done
+          grep -iE "error|fatal|no such" diag/hevtun.log | head -8 | sed 's/^/::error::/'
+          tail -n 40 diag/hevtun.log
+          exit 1
 
       - name: Save libhevtun
         if: steps.hevtun-cache.outputs.cache-hit != 'true'
@@ -105,7 +114,8 @@ jobs:
             -Pandroid.injected.signing.store.file="$RUNNER_TEMP/release.jks" \
             -Pandroid.injected.signing.store.password="$KEYSTORE_PASSWORD" \
             -Pandroid.injected.signing.key.alias=vpn360 \
-            -Pandroid.injected.signing.key.password="$KEYSTORE_PASSWORD" 2>&1 | tee "$GITHUB_WORKSPACE/diag/gradle.log"
+            -Pandroid.injected.signing.key.password="$KEYSTORE_PASSWORD" 2>&1 | tee "$GITHUB_WORKSPACE/diag/gradle.log" \
+            || { grep -E "^e: |error:|What went wrong" -A2 "$GITHUB_WORKSPACE/diag/gradle.log" | head -12 | sed 's/^/::error::/'; exit 1; }
           find app/build/outputs -name '*.apk' | tee "$GITHUB_WORKSPACE/diag/apks-found.txt"
           find app/build/outputs/apk -name '*.apk' -path '*release*' -exec cp {} "$GITHUB_WORKSPACE/out/" \;
           ls -la "$GITHUB_WORKSPACE/out" | tee -a "$GITHUB_WORKSPACE/diag/apks-found.txt"
