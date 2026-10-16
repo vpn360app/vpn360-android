@@ -78,6 +78,7 @@ private enum class RoutingMenuAction(@StringRes val labelRes: Int) {
 }
 
 private enum class RoutingPreset(val type: RoutingType, @StringRes val labelRes: Int) {
+    Vpn360(RoutingType.VPN360, R.string.routing_preset_vpn360),
     ChinaWhitelist(RoutingType.WHITE, R.string.routing_preset_china_whitelist),
     ChinaBlacklist(RoutingType.BLACK, R.string.routing_preset_china_blacklist),
     Global(RoutingType.GLOBAL, R.string.routing_preset_global),

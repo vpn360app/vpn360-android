@@ -526,4 +526,5 @@
     <string name="vpn360_vpn_permission">Acepta el permiso de VPN para continuar.</string>
     <string name="vpn360_connect_desc">Conectar VPN</string>
     <string name="vpn360_disconnect_desc">Desconectar VPN</string>
+    <string name="routing_preset_vpn360">VPN 360 (recomendado)</string>
 </resources>

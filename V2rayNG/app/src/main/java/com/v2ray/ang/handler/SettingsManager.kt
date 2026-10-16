@@ -52,10 +52,20 @@ object SettingsManager {
     private fun initRoutingRulesets(context: Context) {
         val exist = MmkvManager.decodeRoutingRulesets()
         if (exist.isNullOrEmpty()) {
-            val rulesetList = getPresetRoutingRulesets(context)
+            val rulesetList = getPresetRoutingRulesets(context, RoutingType.VPN360)
             MmkvManager.encodeRoutingRulesets(rulesetList)
         }
+        // VPN 360 1.0.0-1.0.4 started with the China preset, which needs geosite/geoip files the
+        // app does not ship: Xray refused to start. Move those installs to the VPN 360 preset once.
+        if (!MmkvManager.decodeSettingsBool(PREF_VPN360_ROUTING_V1, false)) {
+            if (!exist.isNullOrEmpty()) {
+                resetRoutingRulesetsFromPresets(context, RoutingType.VPN360)
+            }
+            MmkvManager.encodeSettings(PREF_VPN360_ROUTING_V1, true)
+        }
     }
+
+    private const val PREF_VPN360_ROUTING_V1 = "vpn360_routing_v1"
 
     /**
      * Get preset routing rulesets.
@@ -63,7 +73,7 @@ object SettingsManager {
      * @param type The routing preset type.
      * @return A mutable list of RulesetItem.
      */
-    private fun getPresetRoutingRulesets(context: Context, type: RoutingType = RoutingType.WHITE): MutableList<RulesetItem>? {
+    private fun getPresetRoutingRulesets(context: Context, type: RoutingType = RoutingType.VPN360): MutableList<RulesetItem>? {
         val assets = Utils.readTextFromAssets(context, type.fileName)
         if (TextUtils.isEmpty(assets)) {
             return null

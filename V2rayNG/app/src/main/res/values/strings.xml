@@ -636,4 +636,5 @@
     <string name="vpn360_vpn_permission">Allow the VPN connection to continue.</string>
     <string name="vpn360_connect_desc">Connect VPN</string>
     <string name="vpn360_disconnect_desc">Disconnect VPN</string>
+    <string name="routing_preset_vpn360">VPN 360 (recommended)</string>
 </resources>

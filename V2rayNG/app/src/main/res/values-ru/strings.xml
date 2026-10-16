@@ -640,4 +640,5 @@
     <string name="vpn360_vpn_permission">Разрешите VPN-подключение, чтобы продолжить.</string>
     <string name="vpn360_connect_desc">Подключить VPN</string>
     <string name="vpn360_disconnect_desc">Отключить VPN</string>
+    <string name="routing_preset_vpn360">VPN 360 (рекомендуется)</string>
 </resources>

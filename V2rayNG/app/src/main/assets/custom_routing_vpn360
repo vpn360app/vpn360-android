@@ -1,0 +1,56 @@
+[
+  {
+    "remarks": "Block QUIC (UDP 443)",
+    "outboundTag": "block",
+    "port": "443",
+    "network": "udp"
+  },
+  {
+    "remarks": "Direct: local network IPs",
+    "outboundTag": "direct",
+    "ip": [
+      "10.0.0.0/8",
+      "100.64.0.0/10",
+      "127.0.0.0/8",
+      "169.254.0.0/16",
+      "172.16.0.0/12",
+      "192.168.0.0/16",
+      "224.0.0.0/4",
+      "::1/128",
+      "fc00::/7",
+      "fe80::/10"
+    ]
+  },
+  {
+    "remarks": "Direct: local network names",
+    "outboundTag": "direct",
+    "domain": [
+      "domain:local",
+      "domain:lan",
+      "domain:localhost"
+    ]
+  },
+  {
+    "remarks": "Direct: Russian sites and apps (banks, Gosuslugi, Yandex, VK)",
+    "outboundTag": "direct",
+    "domain": [
+      "domain:ru",
+      "domain:xn--p1ai",
+      "domain:su",
+      "domain:yandex.net",
+      "domain:yandex.com",
+      "domain:yastatic.net",
+      "domain:vk.com",
+      "domain:vk.me",
+      "domain:userapi.com",
+      "domain:vkuser.net",
+      "domain:mycdn.me",
+      "domain:2gis.com"
+    ]
+  },
+  {
+    "remarks": "Everything else through VPN 360",
+    "port": "0-65535",
+    "outboundTag": "proxy"
+  }
+]

@@ -13,8 +13,8 @@ android {
         applicationId = "com.vpn360.app"
         minSdk = 24
         targetSdk = 37
-        versionCode = 6
-        versionName = "1.0.5"
+        versionCode = 7
+        versionName = "1.0.6"
 
         val abiFilterList = (properties["ABI_FILTERS"] as? String)?.split(';')
         splits {
