@@ -82,7 +82,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
@@ -493,6 +492,11 @@ private fun PowerButton(state: VpnState, enabled: Boolean, onClick: () -> Unit) 
         tween(500),
         label = "powerColor"
     )
+    val iconColor by animateColorAsState(
+        if (state == VpnState.Connected) MaterialTheme.colorScheme.onTertiary else MaterialTheme.colorScheme.onPrimary,
+        tween(500),
+        label = "powerIconColor"
+    )
     val interaction = remember { MutableInteractionSource() }
     val pressed by interaction.collectIsPressedAsState()
     val pressScale by animateFloatAsState(
@@ -585,17 +589,17 @@ private fun PowerButton(state: VpnState, enabled: Boolean, onClick: () -> Unit) 
         ) {
             Box(contentAlignment = Alignment.Center) {
                 if (!enabled) {
-                    CircularProgressIndicator(color = Color.White, strokeWidth = 3.dp, modifier = Modifier.size(56.dp))
+                    CircularProgressIndicator(color = iconColor, strokeWidth = 3.dp, modifier = Modifier.size(56.dp))
                 } else {
                     Canvas(modifier = Modifier.size(64.dp)) {
                         val w = size.minDimension
                         val stroke = Stroke(width = w * 0.09f, cap = StrokeCap.Round)
                         val r = w * 0.38f
                         drawArc(
-                            Color.White, startAngle = -55f, sweepAngle = 290f, useCenter = false,
+                            iconColor, startAngle = -55f, sweepAngle = 290f, useCenter = false,
                             topLeft = Offset(center.x - r, center.y - r + w * 0.06f), size = Size(r * 2, r * 2), style = stroke
                         )
-                        drawLine(Color.White, Offset(center.x, w * 0.06f), Offset(center.x, w * 0.46f), strokeWidth = stroke.width, cap = StrokeCap.Round)
+                        drawLine(iconColor, Offset(center.x, w * 0.06f), Offset(center.x, w * 0.46f), strokeWidth = stroke.width, cap = StrokeCap.Round)
                     }
                 }
             }
@@ -671,7 +675,7 @@ private fun BottomActions(uiState: HomeUiState, onScan: () -> Unit, onOpenCode: 
                     .fillMaxWidth()
                     .height(56.dp),
                 shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = primary, contentColor = Color.White)
+                colors = ButtonDefaults.buttonColors(containerColor = primary, contentColor = MaterialTheme.colorScheme.onPrimary)
             ) {
                 Icon(painterResource(R.drawable.ic_scan_24dp), contentDescription = null)
                 Spacer(Modifier.width(10.dp))
@@ -736,7 +740,7 @@ private fun CodeDialog(busy: Boolean, error: Int?, onDismiss: () -> Unit, onSubm
                 shape = RoundedCornerShape(12.dp)
             ) {
                 if (busy) {
-                    CircularProgressIndicator(color = Color.White, strokeWidth = 2.dp, modifier = Modifier.size(18.dp))
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary, strokeWidth = 2.dp, modifier = Modifier.size(18.dp))
                     Spacer(Modifier.width(8.dp))
                     Text(stringResource(R.string.vpn360_activating))
                 } else {

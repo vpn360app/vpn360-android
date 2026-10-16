@@ -223,7 +223,7 @@ private fun WelcomeScreen(
                     .fillMaxWidth()
                     .height(54.dp),
                 shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = primary, contentColor = Color.White)
+                colors = ButtonDefaults.buttonColors(containerColor = primary, contentColor = MaterialTheme.colorScheme.onPrimary)
             ) {
                 Text(
                     stringResource(if (isLast) R.string.vpn360_start else R.string.vpn360_next),
@@ -280,7 +280,8 @@ private fun BenefitPage(benefit: Benefit) {
                     .background(primary),
                 contentAlignment = Alignment.Center
             ) {
-                Canvas(modifier = Modifier.size(84.dp)) { drawBenefitIcon(benefit.icon, Color.White) }
+                val iconColor = MaterialTheme.colorScheme.onPrimary
+                Canvas(modifier = Modifier.size(84.dp)) { drawBenefitIcon(benefit.icon, iconColor) }
             }
         }
         Spacer(Modifier.height(36.dp))
@@ -408,10 +409,10 @@ private fun PlanCard(plan: PlanUi, canBuy: Boolean, onChoosePlan: (String, Strin
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(name, fontWeight = FontWeight.Bold, fontSize = 18.sp, modifier = Modifier.weight(1f))
                 if (plan.badge != null) {
-                    Surface(shape = RoundedCornerShape(50), color = MaterialTheme.colorScheme.secondary) {
+                    Surface(shape = RoundedCornerShape(50), color = MaterialTheme.colorScheme.tertiary) {
                         Text(
                             stringResource(plan.badge),
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onTertiary,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
@@ -435,7 +436,7 @@ private fun PlanCard(plan: PlanUi, canBuy: Boolean, onChoosePlan: (String, Strin
                 enabled = canBuy,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = primary, contentColor = Color.White)
+                colors = ButtonDefaults.buttonColors(containerColor = primary, contentColor = MaterialTheme.colorScheme.onPrimary)
             ) {
                 Text(stringResource(if (canBuy) R.string.vpn360_choose_plan else R.string.vpn360_soon))
             }
