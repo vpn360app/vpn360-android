@@ -109,8 +109,8 @@ jobs:
           cd V2rayNG
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
           chmod 755 gradlew
-          ./gradlew --no-daemon licensePlaystoreReleaseReport > "$GITHUB_WORKSPACE/diag/license.log" 2>&1 || echo "license report skipped"
-          ./gradlew --no-daemon assemblePlaystoreRelease \
+          ./gradlew --no-daemon licenseWebReleaseReport > "$GITHUB_WORKSPACE/diag/license.log" 2>&1 || echo "license report skipped"
+          ./gradlew --no-daemon assembleWebRelease \
             -Pandroid.injected.signing.store.file="$RUNNER_TEMP/release.jks" \
             -Pandroid.injected.signing.store.password="$KEYSTORE_PASSWORD" \
             -Pandroid.injected.signing.key.alias=vpn360 \
@@ -193,6 +193,7 @@ jobs:
           api-level: 34
           arch: x86_64
           target: google_apis
+          profile: pixel_6
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: bash .github/ci/smoke.sh

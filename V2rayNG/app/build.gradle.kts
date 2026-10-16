@@ -13,8 +13,8 @@ android {
         applicationId = "com.vpn360.app"
         minSdk = 24
         targetSdk = 37
-        versionCode = 4
-        versionName = "1.0.3"
+        versionCode = 5
+        versionName = "1.0.4"
 
         val abiFilterList = (properties["ABI_FILTERS"] as? String)?.split(';')
         splits {
@@ -36,6 +36,13 @@ android {
         }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // VPN 360 settings (change here and push to publish a new version)
+        // CENTRAL_URL: payment web, e.g. "https://vpn360app.com" (empty until it is online)
+        // SALES_WHATSAPP: digits with country code, e.g. "51999888777" (empty = not set yet)
+        buildConfigField("String", "CENTRAL_URL", "\"\"")
+        buildConfigField("String", "SALES_WHATSAPP", "\"\"")
+        buildConfigField("boolean", "SHOW_PLANS", "false")
     }
 
     buildTypes {
@@ -58,6 +65,12 @@ android {
         create("playstore") {
             dimension = "distribution"
             buildConfigField("String", "DISTRIBUTION", "\"Play Store\"")
+        }
+        // Direct download (GitHub / web): shows plans and payment buttons
+        create("web") {
+            dimension = "distribution"
+            buildConfigField("String", "DISTRIBUTION", "\"Web\"")
+            buildConfigField("boolean", "SHOW_PLANS", "true")
         }
     }
 

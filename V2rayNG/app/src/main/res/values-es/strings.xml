@@ -107,7 +107,7 @@
     <string name="connection_test_fail">Sin internet</string>
     <string name="connection_test_error_status_code">Código de error: #%d</string>
     <string name="connection_connected">Conectado. Toca para probar la conexión.</string>
-    <string name="connection_not_connected">Desconectado</string>
+    <string name="connection_not_connected">Desconectado · toca ▶ para conectar</string>
     <string name="import_subscription_success">Suscripción activada correctamente</string>
     <string name="import_subscription_failure">No se pudo activar la suscripción</string>
 

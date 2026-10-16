@@ -46,6 +46,7 @@ import com.v2ray.ang.ui.server.ServerWireguardActivity
 import com.v2ray.ang.ui.settings.SettingsActivity
 import com.v2ray.ang.ui.subscription.SubSettingActivity
 import com.v2ray.ang.ui.userasset.UserAssetActivity
+import com.v2ray.ang.ui.vpn360.WelcomeActivity
 import com.v2ray.ang.util.LogUtil
 import com.v2ray.ang.util.Utils
 import kotlinx.coroutines.Dispatchers
@@ -81,6 +82,20 @@ class MainActivity : HelperBaseComponentActivity() {
             if (restartService || selectedProfileSaved) LauncherManager.restartService(this)
         }
 
+    // VPN 360 start screen (plans, help, activation). The import runs here so the lists refresh.
+    private val welcomeLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val data = result.data ?: return@registerForActivityResult
+            when (data.getStringExtra(WelcomeActivity.EXTRA_ACTION)) {
+                WelcomeActivity.ACTION_IMPORT -> {
+                    val config = data.getStringExtra(WelcomeActivity.EXTRA_CONFIG)
+                    if (!config.isNullOrBlank()) mainViewModel.onAction(MainAction.ImportBatchConfig(config))
+                }
+
+                WelcomeActivity.ACTION_SCAN_QR -> importQRcode()
+            }
+        }
+
     private val settingsActivityLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             val restartService = SettingsChangeManager.consumeRestartService()
@@ -95,6 +110,14 @@ class MainActivity : HelperBaseComponentActivity() {
         mainViewModel.onAction(MainAction.Initialize)
 
         checkAndRequestPermission(PermissionType.POST_NOTIFICATIONS) {}
+
+        // First run (no servers yet): show plans and step-by-step help
+        if (savedInstanceState == null &&
+            !intent.getBooleanExtra("vpn360_skip_welcome", false) &&
+            MmkvManager.decodeAllServerList().isEmpty()
+        ) {
+            welcomeLauncher.launch(Intent(this, WelcomeActivity::class.java))
+        }
     }
 
     @Composable
@@ -137,7 +160,12 @@ class MainActivity : HelperBaseComponentActivity() {
     }
 
     private fun navigateTo(destination: MainDestination) {
+        if (destination == MainDestination.Vpn360Help) {
+            welcomeLauncher.launch(Intent(this, WelcomeActivity::class.java))
+            return
+        }
         val intent = when (destination) {
+            MainDestination.Vpn360Help -> Intent(this, WelcomeActivity::class.java)
             MainDestination.Subscriptions -> Intent(this, SubSettingActivity::class.java)
             MainDestination.PerAppProxy -> Intent(this, PerAppProxyActivity::class.java)
             MainDestination.Routing -> Intent(this, RoutingSettingActivity::class.java)

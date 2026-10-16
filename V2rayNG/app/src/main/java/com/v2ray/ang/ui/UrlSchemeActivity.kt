@@ -51,7 +51,8 @@ class UrlSchemeActivity : BaseComponentActivity() {
                 }
             }
 
-            startActivity(Intent(this, MainActivity::class.java))
+            // VPN 360: the account is being activated from a link, skip the welcome screen
+            startActivity(Intent(this, MainActivity::class.java).putExtra("vpn360_skip_welcome", true))
             finish()
         } catch (e: Exception) {
             LogUtil.e(AppConfig.TAG, "Error processing URL scheme", e)
