@@ -21,10 +21,10 @@ SIZE=$(adb shell wm size | grep -o '[0-9]*x[0-9]*' | tail -1); W=${SIZE%x*}; H=$
 echo "screen $W x $H" >> "$D/package.txt"
 adb logcat -c
 adb shell monkey -p com.vpn360.app -c android.intent.category.LAUNCHER 1
-sleep 12
-adb shell input keyevent KEYCODE_BACK   # close the notification-permission prompt if shown
-sleep 3
+sleep 15
 shot 01-inicio
+adb shell uiautomator dump /sdcard/ui0.xml >/dev/null 2>&1; adb pull /sdcard/ui0.xml "$D/ui0.xml" >/dev/null 2>&1
+grep -o 'text="[^"]\{3,\}"' "$D/ui0.xml" | head -40 > "$D/texts-inicio.txt"
 for n in 02 03 04 05; do
   adb shell input swipe $((W/2)) $((H*3/4)) $((W/2)) $((H/4)) 400; sleep 2; shot $n-planes
 done
@@ -45,5 +45,5 @@ sleep 8; shot 08-tras-enlace
 echo "pid: $(adb shell pidof com.vpn360.app)" >> "$D/package.txt"
 adb logcat -d -v time > "$D/logcat-full.txt" 2>&1
 grep -E "AndroidRuntime|FATAL|com\.vpn360|UrlScheme" "$D/logcat-full.txt" | tail -n 300 > "$D/logcat.txt"
-rm -f "$D/logcat-full.txt" "$D/ui-inicio.xml"
+rm -f "$D/logcat-full.txt" "$D/ui-inicio.xml" "$D/ui0.xml"
 exit 0
