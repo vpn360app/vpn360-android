@@ -81,4 +81,48 @@ echo "pid: $(adb shell pidof com.vpn360.app)" >> "$D/package.txt"
 adb logcat -d -v time > "$D/logcat-full.txt" 2>&1
 grep -E "AndroidRuntime|FATAL|com\.vpn360|UrlScheme|VPN 360" "$D/logcat-full.txt" | tail -n 300 > "$D/logcat.txt"
 rm -f "$D/logcat-full.txt" "$D/ui.xml"
+
+# ---- Real connection with the test account (encrypted in the repo; never printed) ----
+set +x
+LINK=$(openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -in "$GITHUB_WORKSPACE/.github/ci/test-link.enc" -pass env:KEYSTORE_PASSWORD 2>/dev/null)
+R="$D/conexion-real.txt"
+if [ -z "$LINK" ]; then
+  echo "conexion real: no ejecutada (sin enlace de prueba)" > "$R"
+  exit 0
+fi
+HOST=$(python3 -c 'import sys,urllib.parse;print(urllib.parse.urlsplit(sys.argv[1]).hostname)' "$LINK")
+UUID=$(python3 -c 'import sys,urllib.parse;print(urllib.parse.urlsplit(sys.argv[1]).username)' "$LINK")
+HOSTIP=$(python3 -c 'import socket,sys;print(socket.gethostbyname(sys.argv[1]))' "$HOST" 2>/dev/null)
+myip() { adb shell "printf 'GET / HTTP/1.1\r\nHost: api.ipify.org\r\nConnection: close\r\n\r\n' | nc -w 15 api.ipify.org 80" 2>/dev/null | tr -d '\r' | tail -n 1; }
+IP0=$(myip)
+adb shell pm clear com.vpn360.app >/dev/null 2>&1; sleep 2
+adb logcat -c
+adb shell "am start -a android.intent.action.SEND -t text/plain --es android.intent.extra.TEXT '$LINK' -n com.vpn360.app/com.v2ray.ang.ui.UrlSchemeActivity" >/dev/null 2>&1
+sleep 10; shot 21-real-cuenta
+tap "Conectar VPN" 50 47; sleep 3
+tap "Aceptar" 75 60; sleep 12; shot 22-real-conectado
+IP1=$(myip)
+{
+  echo "antes de conectar: ip publica distinta al servidor = $([ -n "$IP0" ] && [ "$IP0" != "$HOSTIP" ] && echo si || echo no) (vacia=$([ -z "$IP0" ] && echo si || echo no))"
+  if [ -n "$IP1" ] && [ "$IP1" = "$HOSTIP" ]; then
+    echo "conexion real: OK - con la VPN encendida, internet sale por el servidor VPN 360"
+  else
+    echo "conexion real: FALLO - ip con VPN vacia=$([ -z "$IP1" ] && echo si || echo no), coincide=no"
+  fi
+} > "$R"
+tap "Desconectar VPN" 50 47; sleep 3
+adb logcat -d -v time | grep -E "AndroidRuntime|FATAL|com\.vpn360|StartCore|Xray|xray" | tail -n 200 > "$D/logcat-real.txt"
+# never publish the server address or the account id
+python3 - "$D" "$HOST" "$HOSTIP" "$UUID" <<'PY'
+import os, sys
+d, secrets = sys.argv[1], [s for s in sys.argv[2:] if s]
+for n in os.listdir(d):
+    p = os.path.join(d, n)
+    if n.endswith((".txt", ".xml")):
+        t = open(p, errors="replace").read()
+        for s in secrets:
+            t = t.replace(s, "***")
+        open(p, "w").write(t)
+PY
+rm -f "$D/ui.xml"
 exit 0

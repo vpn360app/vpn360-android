@@ -25,7 +25,8 @@ class UrlSchemeActivity : BaseComponentActivity() {
             intent.apply {
                 if (action == Intent.ACTION_SEND) {
                     if ("text/plain" == type) {
-                        toImport = intent.getStringExtra(Intent.EXTRA_TEXT)?.let { buildImport(it, null) }
+                        // Shared text is the link itself (e.g. a vless:// link shared from WhatsApp): keep it as is
+                        toImport = intent.getStringExtra(Intent.EXTRA_TEXT)?.trim()
                     }
                 } else if (action == Intent.ACTION_VIEW) {
                     when (data?.host) {
