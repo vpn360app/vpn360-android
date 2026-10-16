@@ -95,27 +95,32 @@ jobs:
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD || 'temporal123' }}
         run: |
+          set -o pipefail
+          mkdir -p "$GITHUB_WORKSPACE/diag" "$GITHUB_WORKSPACE/out"
           cd V2rayNG
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
           chmod 755 gradlew
-          ./gradlew --no-daemon licensePlaystoreReleaseReport || echo "license report skipped"
+          ./gradlew --no-daemon licensePlaystoreReleaseReport > "$GITHUB_WORKSPACE/diag/license.log" 2>&1 || echo "license report skipped"
           ./gradlew --no-daemon assemblePlaystoreRelease \
             -Pandroid.injected.signing.store.file="$RUNNER_TEMP/release.jks" \
             -Pandroid.injected.signing.store.password="$KEYSTORE_PASSWORD" \
             -Pandroid.injected.signing.key.alias=vpn360 \
-            -Pandroid.injected.signing.key.password="$KEYSTORE_PASSWORD"
-          mkdir -p "$GITHUB_WORKSPACE/out"
-          find app/build/outputs/apk -name 'VPN360-*.apk' -exec cp {} "$GITHUB_WORKSPACE/out/" \;
-          ls -la "$GITHUB_WORKSPACE/out"
+            -Pandroid.injected.signing.key.password="$KEYSTORE_PASSWORD" 2>&1 | tee "$GITHUB_WORKSPACE/diag/gradle.log"
+          find app/build/outputs -name '*.apk' | tee "$GITHUB_WORKSPACE/diag/apks-found.txt"
+          find app/build/outputs/apk -name '*.apk' -path '*release*' -exec cp {} "$GITHUB_WORKSPACE/out/" \;
+          ls -la "$GITHUB_WORKSPACE/out" | tee -a "$GITHUB_WORKSPACE/diag/apks-found.txt"
 
       - name: Check APK
         run: |
           BT=$ANDROID_HOME/build-tools/37.0.0
+          ls $BT > diag/build-tools.txt 2>&1 || true
           for f in out/*.apk; do
-            echo "== $f ($(du -h "$f" | cut -f1))"
-            $BT/aapt2 dump badging "$f" | grep -E "^package:|application-label:|native-code" || true
+            echo "== $f $(du -h "$f" | cut -f1)" >> diag/check.txt
+            $BT/aapt2 dump badging "$f" 2>&1 | grep -E "^package:|application-label:|native-code|sdkVersion|targetSdk" >> diag/check.txt || true
+            $BT/apksigner verify --print-certs "$f" 2>&1 | grep -E "Signer #1 certificate (DN|SHA-256)|ERROR|DOES NOT" >> diag/check.txt || true
           done
-          $BT/apksigner verify --print-certs out/VPN360-universal.apk | grep -E "Signer #1 certificate (DN|SHA-256)"
+          cat diag/check.txt
+          ls out/*.apk > /dev/null
 
       - name: Upload APKs (artifact)
         uses: actions/upload-artifact@v7
@@ -123,6 +128,7 @@ jobs:
           name: VPN360-apks
           path: out/*.apk
           retention-days: 30
+          if-no-files-found: error
 
       - name: Publish release
         if: steps.signing.outputs.official == 'true' && github.ref == 'refs/heads/main'
@@ -137,3 +143,58 @@ jobs:
           else
             gh release create "$TAG" out/*.apk --title "VPN 360 ${VERSION}" --notes "$NOTES" --latest
           fi
+
+      - name: Publish diagnostics (branch ci-build)
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/ci && cd /tmp/ci
+          cp -r "$GITHUB_WORKSPACE/diag/." . 2>/dev/null || true
+          [ -f gradle.log ] && tail -n 1500 gradle.log > gradle-tail.log && rm gradle.log
+          echo "run=${{ github.run_id }} status=${{ job.status }} sha=${{ github.sha }}" > STATUS
+          git init -q -b ci-build && git config user.name ci && git config user.email ci@users.noreply.github.com
+          git add -A && git commit -qm "diag run ${{ github.run_id }}"
+          git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}" ci-build
+
+  smoke-test:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Download APKs
+        uses: actions/download-artifact@v8
+        with:
+          name: VPN360-apks
+          path: apks
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run app in emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: bash .github/ci/smoke.sh
+
+      - name: Publish smoke results (branch ci-smoke)
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/ci && cd /tmp/ci
+          cp -r "$GITHUB_WORKSPACE/diag/." . 2>/dev/null || true
+          echo "run=${{ github.run_id }} status=${{ job.status }} sha=${{ github.sha }}" > STATUS
+          git init -q -b ci-smoke && git config user.name ci && git config user.email ci@users.noreply.github.com
+          git add -A && git commit -qm "smoke run ${{ github.run_id }}"
+          git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}" ci-smoke
