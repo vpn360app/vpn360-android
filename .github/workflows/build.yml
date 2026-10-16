@@ -1,0 +1,139 @@
+name: Construir app VPN 360
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NDK_VERSION: "30.0.16248370"
+  # Xray core for Android (libv2ray.aar) from 2dust/AndroidLibXrayLite
+  LIBV2RAY_TAG: "v26.10.10"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          cmdline-tools-version: "14742923"
+          log-accepted-android-sdk-licenses: false
+          packages: "platforms;android-37.0 build-tools;37.0.0 platform-tools"
+
+      - name: Install NDK
+        run: |
+          echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --channel=0 --install "ndk;${NDK_VERSION}" > /dev/null
+          echo "NDK_HOME=$ANDROID_HOME/ndk/${NDK_VERSION}" >> $GITHUB_ENV
+
+      - name: Restore cached libhevtun
+        id: hevtun-cache
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ github.workspace }}/libs
+          key: libhevtun-${{ runner.os }}-${{ env.NDK_VERSION }}-${{ hashFiles('.git/modules/hev-socks5-tunnel/HEAD') }}-${{ hashFiles('compile-hevtun.sh') }}
+
+      - name: Build libhevtun (tun2socks)
+        if: steps.hevtun-cache.outputs.cache-hit != 'true'
+        run: bash compile-hevtun.sh
+
+      - name: Save libhevtun
+        if: steps.hevtun-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: ${{ github.workspace }}/libs
+          key: libhevtun-${{ runner.os }}-${{ env.NDK_VERSION }}-${{ hashFiles('.git/modules/hev-socks5-tunnel/HEAD') }}-${{ hashFiles('compile-hevtun.sh') }}
+
+      - name: Copy native libs
+        run: cp -r ${{ github.workspace }}/libs ${{ github.workspace }}/V2rayNG/app
+
+      - name: Download Xray core (libv2ray.aar)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p V2rayNG/app/libs
+          gh release download "$LIBV2RAY_TAG" -R 2dust/AndroidLibXrayLite -p libv2ray.aar -D V2rayNG/app/libs \
+            || gh release download -R 2dust/AndroidLibXrayLite -p libv2ray.aar -D V2rayNG/app/libs
+          ls -la V2rayNG/app/libs
+
+      - name: Setup Java
+        uses: actions/setup-java@v6.0.1
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Prepare signing key
+        id: signing
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_PASSWORD" ]; then
+            openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 \
+              -in signing/vpn360-release.jks.enc -out "$RUNNER_TEMP/release.jks" -pass env:KEYSTORE_PASSWORD
+            echo "official=true" >> $GITHUB_OUTPUT
+          else
+            echo "::warning::Falta el secreto KEYSTORE_PASSWORD: se firma con una llave temporal de prueba y no se publica."
+            keytool -genkeypair -noprompt -keystore "$RUNNER_TEMP/release.jks" -storetype JKS -alias vpn360 \
+              -keyalg RSA -keysize 2048 -validity 30 -storepass temporal123 -keypass temporal123 -dname "CN=PRUEBA"
+            echo "official=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build APK
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD || 'temporal123' }}
+        run: |
+          cd V2rayNG
+          echo "sdk.dir=${ANDROID_HOME}" > local.properties
+          chmod 755 gradlew
+          ./gradlew --no-daemon licensePlaystoreReleaseReport || echo "license report skipped"
+          ./gradlew --no-daemon assemblePlaystoreRelease \
+            -Pandroid.injected.signing.store.file="$RUNNER_TEMP/release.jks" \
+            -Pandroid.injected.signing.store.password="$KEYSTORE_PASSWORD" \
+            -Pandroid.injected.signing.key.alias=vpn360 \
+            -Pandroid.injected.signing.key.password="$KEYSTORE_PASSWORD"
+          mkdir -p "$GITHUB_WORKSPACE/out"
+          find app/build/outputs/apk -name 'VPN360-*.apk' -exec cp {} "$GITHUB_WORKSPACE/out/" \;
+          ls -la "$GITHUB_WORKSPACE/out"
+
+      - name: Check APK
+        run: |
+          BT=$ANDROID_HOME/build-tools/37.0.0
+          for f in out/*.apk; do
+            echo "== $f ($(du -h "$f" | cut -f1))"
+            $BT/aapt2 dump badging "$f" | grep -E "^package:|application-label:|native-code" || true
+          done
+          $BT/apksigner verify --print-certs out/VPN360-universal.apk | grep -E "Signer #1 certificate (DN|SHA-256)"
+
+      - name: Upload APKs (artifact)
+        uses: actions/upload-artifact@v7
+        with:
+          name: VPN360-apks
+          path: out/*.apk
+          retention-days: 30
+
+      - name: Publish release
+        if: steps.signing.outputs.official == 'true' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(grep -E 'versionName = "' V2rayNG/app/build.gradle.kts | head -1 | sed -E 's/.*"(.*)".*/\1/')
+          TAG="v${VERSION}"
+          NOTES="VPN 360 ${VERSION}. Descarga VPN360-universal.apk (funciona en cualquier Android) o VPN360-arm64-v8a.apk (mas liviano, celulares modernos)."
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            gh release upload "$TAG" out/*.apk --clobber
+          else
+            gh release create "$TAG" out/*.apk --title "VPN 360 ${VERSION}" --notes "$NOTES" --latest
+          fi
