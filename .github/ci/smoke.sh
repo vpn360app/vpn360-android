@@ -93,9 +93,14 @@ fi
 HOST=$(python3 -c 'import sys,urllib.parse;print(urllib.parse.urlsplit(sys.argv[1]).hostname)' "$LINK")
 UUID=$(python3 -c 'import sys,urllib.parse;print(urllib.parse.urlsplit(sys.argv[1]).username)' "$LINK")
 HOSTIP=$(python3 -c 'import socket,sys;print(socket.gethostbyname(sys.argv[1]))' "$HOST" 2>/dev/null)
-myip() { adb shell "printf 'GET / HTTP/1.1\r\nHost: api.ipify.org\r\nConnection: close\r\n\r\n' | nc -w 15 api.ipify.org 80" 2>/dev/null | tr -d '\r' | tail -n 1; }
+# public IP seen from inside the emulator (plain HTTP, several tools, two services)
+myip() {
+  adb shell 'for h in api.ipify.org icanhazip.com; do for c in nc "toybox nc"; do r=$(printf "GET / HTTP/1.1\r\nHost: $h\r\nUser-Agent: curl/8\r\nConnection: close\r\n\r\n" | $c -w 15 $h 80 2>/dev/null | tr -d "\r" | tail -n 1); case "$r" in *.*.*.*) echo "$r"; exit 0;; esac; done; done; command -v curl >/dev/null && curl -s -m 15 http://api.ipify.org' 2>/dev/null | tr -d '\r\n '
+}
+adb shell 'command -v nc; command -v toybox; command -v curl; getprop net.dns1' > "$D/herramientas.txt" 2>&1
 IP0=$(myip)
 adb shell pm clear com.vpn360.app >/dev/null 2>&1; sleep 2
+adb shell pm grant com.vpn360.app android.permission.POST_NOTIFICATIONS >/dev/null 2>&1
 adb logcat -c
 adb shell "am start -a android.intent.action.SEND -t text/plain --es android.intent.extra.TEXT '$LINK' -n com.vpn360.app/com.v2ray.ang.ui.UrlSchemeActivity" >/dev/null 2>&1
 sleep 10; shot 21-real-cuenta
