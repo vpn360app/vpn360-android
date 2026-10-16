@@ -5,6 +5,7 @@ import java.util.Locale
 
 enum class Language(val code: String, val languageTag: String) {
     AUTO("auto", ""),
+    SPANISH("es", "es"),
     ENGLISH("en", "en"),
     CHINA("zh-rCN", "zh-CN"),
     TRADITIONAL_CHINESE("zh-rTW", "zh-TW"),
@@ -36,6 +37,7 @@ enum class Language(val code: String, val languageTag: String) {
 
             val locale = Locale.forLanguageTag(languageTag)
             return when (locale.language) {
+                "es" -> SPANISH
                 "en" -> ENGLISH
                 "zh" -> if (
                     locale.script == "Hant" || locale.country in setOf("TW", "HK", "MO")

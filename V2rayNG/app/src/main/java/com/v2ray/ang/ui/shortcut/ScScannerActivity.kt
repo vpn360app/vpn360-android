@@ -9,7 +9,7 @@ import com.v2ray.ang.extension.toastError
 import com.v2ray.ang.extension.toastSuccess
 import com.v2ray.ang.handler.AngConfigManager
 import com.v2ray.ang.ui.base.HelperBaseComponentActivity
-import com.v2ray.ang.ui.main.MainActivity
+import com.v2ray.ang.ui.vpn360.HomeActivity
 
 class ScScannerActivity : HelperBaseComponentActivity() {
 
@@ -35,7 +35,7 @@ class ScScannerActivity : HelperBaseComponentActivity() {
                     toastError(R.string.toast_failure)
                 }
 
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, HomeActivity::class.java))
             }
             finish()
         }

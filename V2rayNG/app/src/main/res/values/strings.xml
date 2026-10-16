@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">VPN 360</string>
-    <string name="vpn360_plans_help" translatable="false">Planes y ayuda</string>
     <string name="app_widget_name">Switch</string>
     <string name="app_tile_name">Switch</string>
     <string name="app_tile_first_use">Add a profile in the app before using this feature.</string>
@@ -562,4 +561,79 @@
     <string name="connection_test_empty_message">no details available</string>
     <string name="value_unknown">unknown</string>
 
+
+    <!-- VPN 360 -->
+    <string name="vpn360_plans_help">Plans and help</string>
+    <string name="vpn360_status_connected">Protected</string>
+    <string name="vpn360_status_disconnected">Not protected</string>
+    <string name="vpn360_status_connecting">Connecting…</string>
+    <string name="vpn360_title_connected">Connected</string>
+    <string name="vpn360_title_disconnected">Disconnected</string>
+    <string name="vpn360_title_connecting">Connecting</string>
+    <string name="vpn360_tap_to_connect">Tap the button to connect</string>
+    <string name="vpn360_tap_to_disconnect">Tap the button to disconnect</string>
+    <string name="vpn360_server_line">Server: %1$s</string>
+    <string name="vpn360_connect">Connect</string>
+    <string name="vpn360_disconnect">Disconnect</string>
+    <string name="vpn360_no_account_title">Activate your account</string>
+    <string name="vpn360_no_account_text">Scan the code you received after paying, or enter your access code.</string>
+    <string name="vpn360_scan_code">Scan code</string>
+    <string name="vpn360_scan_other">Scan another code</string>
+    <string name="vpn360_have_code">I have an access code</string>
+    <string name="vpn360_see_plans">See plans</string>
+    <string name="vpn360_menu_plans">Plans and benefits</string>
+    <string name="vpn360_menu_advanced">Advanced mode</string>
+    <string name="vpn360_menu_support">WhatsApp support</string>
+    <string name="vpn360_language">Language</string>
+    <string name="vpn360_language_auto">Phone language</string>
+    <string name="vpn360_account_activated">Account activated. Tap the button to connect.</string>
+    <string name="vpn360_invalid_code">That code isn\'t valid. Try again.</string>
+    <string name="vpn360_activating">Activating…</string>
+    <string name="vpn360_code_title">Enter your access code</string>
+    <string name="vpn360_code_hint">Access code</string>
+    <string name="vpn360_code_text">You received it by email and on the page after paying.</string>
+    <string name="vpn360_activate">Activate</string>
+    <string name="vpn360_error_offline">Couldn\'t reach the account server. Try again in a few minutes.</string>
+    <string name="vpn360_error_soon">Code activation will be available very soon. Meanwhile, use Scan code.</string>
+    <string name="vpn360_error_inactive">Your subscription isn\'t active. Renew it or contact us.</string>
+    <string name="vpn360_error_wrong_code">Wrong access code.</string>
+    <string name="vpn360_ob1_title">Welcome to VPN 360</string>
+    <string name="vpn360_ob1_text">Internet without restrictions, wherever you are.</string>
+    <string name="vpn360_ob2_title">Your apps, as always</string>
+    <string name="vpn360_ob2_text">WhatsApp, Instagram, YouTube, Google and your calls working normally.</string>
+    <string name="vpn360_ob3_title">Private and secure</string>
+    <string name="vpn360_ob3_text">Your connection travels encrypted: nobody can see what you do.</string>
+    <string name="vpn360_ob4_title">One tap to connect</string>
+    <string name="vpn360_ob4_text">Scan your code once and connect with the big button.</string>
+    <string name="vpn360_plans_title">Choose your plan</string>
+    <string name="vpn360_student_title">Student plan</string>
+    <string name="vpn360_student_note">Only for students registered in our program. Use the same WhatsApp or email you signed up with.</string>
+    <string name="vpn360_per_month"> /month</string>
+    <string name="vpn360_plan_monthly">Monthly</string>
+    <string name="vpn360_plan_6m">6 months</string>
+    <string name="vpn360_plan_annual">Annual</string>
+    <string name="vpn360_plan_student">International Student</string>
+    <string name="vpn360_bill_monthly">Billed every month</string>
+    <string name="vpn360_bill_6m">S/ 95.40 every 6 months</string>
+    <string name="vpn360_bill_annual">S/ 130.80 per year</string>
+    <string name="vpn360_bill_student">Billed every month · registered students only</string>
+    <string name="vpn360_save_20">Save 20%</string>
+    <string name="vpn360_save_45">Save 45%</string>
+    <string name="vpn360_exclusive">Exclusive</string>
+    <string name="vpn360_choose_plan">Choose this plan</string>
+    <string name="vpn360_soon">Coming soon</string>
+    <string name="vpn360_next">Next</string>
+    <string name="vpn360_skip">Skip</string>
+    <string name="vpn360_start">Start</string>
+    <string name="vpn360_have_account">I already have an account</string>
+    <string name="vpn360_whatsapp_plan_msg">Hi, I want the %1$s plan of VPN 360</string>
+    <string name="vpn360_whatsapp_help_msg">Hi, I need help with VPN 360</string>
+    <string name="vpn360_page_of">Page %1$d of %2$d</string>
+    <string name="vpn360_cancel">Cancel</string>
+    <string name="vpn360_menu">Menu</string>
+    <string name="vpn360_importing">Setting up your account…</string>
+    <string name="vpn360_error_start">Could not connect. Try again or scan your code again.</string>
+    <string name="vpn360_vpn_permission">Allow the VPN connection to continue.</string>
+    <string name="vpn360_connect_desc">Connect VPN</string>
+    <string name="vpn360_disconnect_desc">Disconnect VPN</string>
 </resources>

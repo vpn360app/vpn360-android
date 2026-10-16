@@ -62,7 +62,7 @@
         </service>
 
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".ui.vpn360.HomeActivity"
             android:exported="true"
             android:launchMode="singleTask">
             <intent-filter>
@@ -79,6 +79,10 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:exported="false"
+            android:launchMode="singleTask" />
         <activity
             android:name=".ui.server.ServerVmessActivity"
             android:exported="false"

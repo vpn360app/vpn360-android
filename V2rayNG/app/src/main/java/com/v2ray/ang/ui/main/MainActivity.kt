@@ -21,7 +21,6 @@ import com.v2ray.ang.extension.toast
 import com.v2ray.ang.extension.toastError
 import com.v2ray.ang.extension.toastSuccess
 import com.v2ray.ang.handler.AngConfigManager
-import com.v2ray.ang.handler.MmkvManager
 import com.v2ray.ang.handler.SettingsChangeManager
 import com.v2ray.ang.handler.SettingsManager
 import com.v2ray.ang.ui.AboutActivity
@@ -110,19 +109,12 @@ class MainActivity : HelperBaseComponentActivity() {
         mainViewModel.onAction(MainAction.Initialize)
 
         checkAndRequestPermission(PermissionType.POST_NOTIFICATIONS) {}
-
-        // First run (no servers yet): show plans and step-by-step help
-        if (savedInstanceState == null &&
-            !intent.getBooleanExtra("vpn360_skip_welcome", false) &&
-            MmkvManager.decodeAllServerList().isEmpty()
-        ) {
-            welcomeLauncher.launch(Intent(this, WelcomeActivity::class.java))
-        }
+        // VPN 360: the simple home (HomeActivity) is the launcher; this screen is "advanced mode".
     }
 
     @Composable
     override fun ScreenContent() {
-        BackHandler { moveTaskToBack(false) }
+        BackHandler { finish() }
         MainScreen(
             mainViewModel = mainViewModel,
             onAction = { action ->
