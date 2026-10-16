@@ -2,6 +2,7 @@ package com.v2ray.ang
 
 import android.app.Application
 import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.work.Configuration
 import androidx.work.WorkManager
@@ -47,5 +48,14 @@ class AngApplication : Application() {
 
         // Initialize theme state from MMKV
         ThemeManager.refresh()
+
+        // VPN 360: white/red (light) by default, also for non-Compose windows
+        AppCompatDelegate.setDefaultNightMode(
+            when (MmkvManager.decodeSettingsString(AppConfig.PREF_UI_MODE_NIGHT, "1")) {
+                "2" -> AppCompatDelegate.MODE_NIGHT_YES
+                "0" -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                else -> AppCompatDelegate.MODE_NIGHT_NO
+            }
+        )
     }
 }
