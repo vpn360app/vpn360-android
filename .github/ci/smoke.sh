@@ -6,6 +6,7 @@ APK=$(ls apks/VPN360-x86_64.apk 2>/dev/null || ls apks/VPN360-universal.apk)
 adb install -r -g "$APK" > "$D/install.txt" 2>&1
 adb shell dumpsys package com.vpn360.app | grep -E "versionName|versionCode|firstInstallTime" > "$D/package.txt"
 adb logcat -c
+adb shell cmd locale set-app-locales com.vpn360.app --locales es-PE >> "$D/install.txt" 2>&1 || true
 adb shell monkey -p com.vpn360.app -c android.intent.category.LAUNCHER 1
 sleep 12
 adb exec-out screencap -p > "$D/01-abrir-app.png"
