@@ -35,7 +35,7 @@ import java.util.Locale
  * A VPN 360 plan. Mercado Pago charges [amount] soles every [months] months; the dollar price is
  * a reference computed with the exchange rate published by the account server.
  */
-internal data class PlanUi(
+data class PlanUi(
     val id: String,
     val name: Int,
     val months: Int,
