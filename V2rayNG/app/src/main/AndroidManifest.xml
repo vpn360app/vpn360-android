@@ -218,6 +218,13 @@
             android:name=".ui.vpn360.WelcomeActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.vpn360.AboutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.vpn360.BuyActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".ui.TranslatorsActivity"
             android:exported="false" />
 

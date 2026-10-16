@@ -13,8 +13,8 @@ android {
         applicationId = "com.vpn360.app"
         minSdk = 24
         targetSdk = 37
-        versionCode = 7
-        versionName = "1.0.6"
+        versionCode = 8
+        versionName = "1.0.7"
 
         val abiFilterList = (properties["ABI_FILTERS"] as? String)?.split(';')
         splits {
@@ -43,6 +43,9 @@ android {
         buildConfigField("String", "CENTRAL_URL", "\"\"")
         buildConfigField("String", "SALES_WHATSAPP", "\"\"")
         buildConfigField("boolean", "SHOW_PLANS", "false")
+        // VPN 360: the app only accepts our own servers (REALITY public keys, comma separated)
+        // and subscriptions from CENTRAL_URL. Public keys are not secret.
+        buildConfigField("String", "VPN360_REALITY_KEYS", "\"SCAJ0Io-MIRhJLvWKEuE_ov-qBYp4vhivtyEAMJ5bVQ\"")
     }
 
     buildTypes {

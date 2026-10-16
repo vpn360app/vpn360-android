@@ -8,6 +8,8 @@ import com.v2ray.ang.BuildConfig
 import com.v2ray.ang.R
 import com.v2ray.ang.handler.AngConfigManager
 import com.v2ray.ang.handler.MmkvManager
+import com.v2ray.ang.handler.UpdateCheckerManager
+import com.v2ray.ang.handler.Vpn360Policy
 import com.v2ray.ang.ui.base.BaseViewModel
 import com.v2ray.ang.util.LogUtil
 import kotlinx.coroutines.Dispatchers
@@ -19,11 +21,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
-import java.net.HttpURLConnection
-import java.net.URL
 
 enum class VpnState { Disconnected, Connecting, Connected }
+
+/** Language change: the overlay covers the screen, the language is applied, then it reveals. */
+data class LangSwitch(val code: String, val label: String, val greeting: String, val applied: Boolean = false)
 
 data class HomeUiState(
     val vpnState: VpnState = VpnState.Disconnected,
@@ -33,26 +35,57 @@ data class HomeUiState(
     val importing: Boolean = false,
     val codeDialogOpen: Boolean = false,
     val codeBusy: Boolean = false,
-    val codeError: Int? = null
+    val codeError: Int? = null,
+    val expired: Boolean = false,
+    val updateVersion: String? = null,
+    val language: String = "auto",
+    val langSwitch: LangSwitch? = null
 )
 
 /**
- * State of the simple VPN 360 home: is there an account (any server imported), the connection
- * state reported by the VPN service, and the access-code activation.
+ * State of the simple VPN 360 home: account (any server imported), connection state reported by
+ * the VPN service, access-code activation, plan expiry, app updates and language changes.
  */
 class HomeViewModel(application: Application) : BaseViewModel(application) {
 
     companion object {
         private const val PREF_CONNECTED_SINCE = "vpn360_connected_since"
+        private const val PREF_UPDATE_CHECKED_AT = "vpn360_update_checked_at"
+        private const val PREF_UPDATE_VERSION = "vpn360_update_version"
         private const val CONNECT_TIMEOUT_MS = 25_000L
+        private const val UPDATE_EVERY_MS = 12 * 3600_000L
+        private const val STATUS_EVERY_MS = 15 * 60_000L
+        private const val PENDING_MAX_AGE_MS = 3 * 24 * 3600_000L
+
+        /** a > b for versions like 1.0.10 */
+        fun newerThan(a: String, b: String): Boolean {
+            val x = a.split('.').map { it.toIntOrNull() ?: 0 }
+            val y = b.split('.').map { it.toIntOrNull() ?: 0 }
+            for (i in 0 until maxOf(x.size, y.size)) {
+                val d = x.getOrElse(i) { 0 } - y.getOrElse(i) { 0 }
+                if (d != 0) return d > 0
+            }
+            return false
+        }
     }
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     private var connectTimeout: Job? = null
+    private var lastStatusCheck = 0L
 
-    /** Reloads the account / selected server (e.g. after returning from advanced mode). */
+    init {
+        val saved = MmkvManager.decodeSettingsString(PREF_UPDATE_VERSION).orEmpty()
+        _uiState.update {
+            it.copy(
+                updateVersion = saved.takeIf { v -> v.isNotEmpty() && newerThan(v, BuildConfig.VERSION_NAME) },
+                language = MmkvManager.decodeSettingsString(AppConfig.PREF_LANGUAGE) ?: "auto"
+            )
+        }
+    }
+
+    /** Reloads the account / selected server and runs the periodic checks. */
     fun refresh() {
         viewModelScope.launch(Dispatchers.IO) {
             val servers = MmkvManager.decodeAllServerList()
@@ -62,9 +95,20 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
                 MmkvManager.setSelectServer(selected)
             }
             val name = selected?.let { MmkvManager.decodeServerConfig(it)?.remarks }.orEmpty()
-            _uiState.update { it.copy(hasAccount = servers.isNotEmpty(), serverName = name) }
+            _uiState.update {
+                it.copy(
+                    hasAccount = servers.isNotEmpty(),
+                    serverName = name,
+                    language = MmkvManager.decodeSettingsString(AppConfig.PREF_LANGUAGE) ?: "auto"
+                )
+            }
+            checkPendingOrder()
+            checkAccountStatus(force = false)
+            checkUpdateIfDue()
         }
     }
+
+    // ---------------- VPN state ----------------
 
     /** State broadcast by the VPN service (AppConfig.MSG_STATE_*). */
     fun onServiceMessage(key: Int) {
@@ -114,6 +158,8 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
         _uiState.update { it.copy(vpnState = VpnState.Disconnected, connectedSince = 0L) }
     }
 
+    // ---------------- activation ----------------
+
     /**
      * Handles what the QR scanner read: a vless:// link, an https subscription link, a
      * vpn360://install-sub link, or a plain access code.
@@ -123,7 +169,7 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
         when {
             value.startsWith("vpn360://", ignoreCase = true) -> {
                 val url = Uri.parse(value).getQueryParameter("url")
-                if (url.isNullOrBlank()) toastError(R.string.vpn360_invalid_code) else importConfig(url)
+                if (url.isNullOrBlank()) toastError(R.string.vpn360_not_ours) else importConfig(url)
             }
 
             value.contains("://") -> importConfig(value)
@@ -131,24 +177,36 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
         }
     }
 
-    /** Imports a link (vless:// or an https subscription) and selects its first server. */
+    /** Imports a VPN 360 link (our vless server or our subscription) and selects its first server. */
     fun importConfig(text: String) {
         if (_uiState.value.importing) return
+        if (Vpn360Policy.filter(text) == null) {
+            toastError(R.string.vpn360_not_ours)
+            return
+        }
         _uiState.update { it.copy(importing = true) }
         viewModelScope.launch(Dispatchers.IO) {
             val ok = try {
                 val (count, countSub) = AngConfigManager.importBatchConfig(text, "", true)
-                count + countSub > 0 && MmkvManager.decodeAllServerList().isNotEmpty()
+                var imported = count + countSub > 0
+                if (!imported && Vpn360Policy.isOurSubscription(text.trim()) &&
+                    MmkvManager.decodeSubscriptions().any { it.subscription.url == text.trim() }
+                ) {
+                    // Same account scanned again: just refresh it
+                    AngConfigManager.updateConfigViaSubAll()
+                    imported = true
+                }
+                imported && MmkvManager.decodeAllServerList().isNotEmpty()
             } catch (e: Exception) {
                 LogUtil.e(AppConfig.TAG, "VPN 360 import failed", e)
                 false
             }
             if (ok) {
-                // Use the newest imported server
                 MmkvManager.decodeAllServerList().firstOrNull()?.let { MmkvManager.setSelectServer(it) }
+                MmkvManager.encodeSettings(WelcomeActivity.PREF_ONBOARDED, true)
             }
             withContext(Dispatchers.Main) {
-                _uiState.update { it.copy(importing = false) }
+                _uiState.update { it.copy(importing = false, expired = if (ok) false else it.expired) }
                 refresh()
                 if (ok) toastSuccess(R.string.vpn360_account_activated) else toastError(R.string.vpn360_invalid_code)
             }
@@ -166,13 +224,13 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
             _uiState.update { it.copy(codeDialogOpen = true, codeError = R.string.vpn360_error_wrong_code) }
             return
         }
-        if (BuildConfig.CENTRAL_URL.isEmpty()) {
+        if (!Vpn360Api.enabled) {
             _uiState.update { it.copy(codeDialogOpen = true, codeError = R.string.vpn360_error_soon) }
             return
         }
         _uiState.update { it.copy(codeDialogOpen = true, codeBusy = true, codeError = null) }
         viewModelScope.launch(Dispatchers.IO) {
-            val result = login(code)
+            val result = Vpn360Api.login(code)
             withContext(Dispatchers.Main) {
                 if (result.subUrl != null) {
                     _uiState.update { it.copy(codeDialogOpen = false, codeBusy = false, codeError = null) }
@@ -184,34 +242,73 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
         }
     }
 
-    private data class LoginResult(val subUrl: String? = null, val error: Int? = null)
+    // ---------------- purchase, expiry, updates ----------------
 
-    private fun login(code: String): LoginResult {
-        return try {
-            val conn = URL(BuildConfig.CENTRAL_URL.trimEnd('/') + "/api/app/login").openConnection() as HttpURLConnection
-            conn.requestMethod = "POST"
-            conn.connectTimeout = 15_000
-            conn.readTimeout = 15_000
-            conn.doOutput = true
-            conn.setRequestProperty("Content-Type", "application/json")
-            conn.outputStream.use { it.write(JSONObject().put("code", code).toString().toByteArray()) }
-            val status = conn.responseCode
-            val body = (if (status in 200..299) conn.inputStream else conn.errorStream)
-                ?.bufferedReader()?.use { it.readText() }.orEmpty()
-            conn.disconnect()
-            val json = runCatching { JSONObject(body) }.getOrNull()
-            when {
-                status == 401 || status == 404 -> LoginResult(error = R.string.vpn360_error_wrong_code)
-                status !in 200..299 || json == null -> LoginResult(error = R.string.vpn360_error_offline)
-                !json.optBoolean("active") -> LoginResult(error = R.string.vpn360_error_inactive)
-                json.optString("subscription_url").startsWith("https://") ->
-                    LoginResult(subUrl = json.optString("subscription_url"))
-
-                else -> LoginResult(error = R.string.vpn360_error_offline)
+    /** A purchase started in the app whose confirmation arrived while the app was closed. */
+    private suspend fun checkPendingOrder() {
+        val ref = MmkvManager.decodeSettingsString(Vpn360Api.PREF_PENDING_REF).orEmpty()
+        if (ref.isEmpty() || !Vpn360Api.enabled) return
+        val at = MmkvManager.decodeSettingsLong(Vpn360Api.PREF_PENDING_AT, 0L)
+        if (System.currentTimeMillis() - at > PENDING_MAX_AGE_MS) {
+            clearPending()
+            return
+        }
+        val order = Vpn360Api.order(ref)
+        when {
+            !order.known -> clearPending()
+            order.active && order.subUrl != null -> {
+                clearPending()
+                withContext(Dispatchers.Main) { importConfig(order.subUrl) }
             }
+        }
+    }
+
+    private fun clearPending() {
+        MmkvManager.encodeSettings(Vpn360Api.PREF_PENDING_REF, "")
+        MmkvManager.encodeSettings(Vpn360Api.PREF_PENDING_AT, 0L)
+    }
+
+    /** Shows "Your plan has expired — Renew" when the account server says the plan is not active. */
+    private fun checkAccountStatus(force: Boolean) {
+        if (!Vpn360Api.enabled || !_uiState.value.hasAccount) return
+        val now = System.currentTimeMillis()
+        if (!force && now - lastStatusCheck < STATUS_EVERY_MS) return
+        lastStatusCheck = now
+        val active = Vpn360Api.isAccountActive() ?: return
+        _uiState.update { it.copy(expired = !active) }
+    }
+
+    /** Direct-download builds check GitHub for a newer release at most twice a day. */
+    private suspend fun checkUpdateIfDue() {
+        if (BuildConfig.DISTRIBUTION != "Web") return
+        val now = System.currentTimeMillis()
+        if (now - MmkvManager.decodeSettingsLong(PREF_UPDATE_CHECKED_AT, 0L) < UPDATE_EVERY_MS) return
+        MmkvManager.encodeSettings(PREF_UPDATE_CHECKED_AT, now)
+        try {
+            val result = UpdateCheckerManager.checkForUpdate(false)
+            val version = if (result.hasUpdate) result.latestVersion.orEmpty() else ""
+            MmkvManager.encodeSettings(PREF_UPDATE_VERSION, version)
+            _uiState.update { it.copy(updateVersion = version.takeIf { v -> v.isNotEmpty() }) }
         } catch (e: Exception) {
-            LogUtil.e(AppConfig.TAG, "VPN 360 login failed", e)
-            LoginResult(error = R.string.vpn360_error_offline)
+            LogUtil.e(AppConfig.TAG, "VPN 360 update check failed", e)
+        }
+    }
+
+    // ---------------- language ----------------
+
+    fun startLanguageSwitch(code: String, label: String, greeting: String) {
+        if (_uiState.value.langSwitch != null) return
+        _uiState.update { it.copy(langSwitch = LangSwitch(code, label, greeting)) }
+    }
+
+    /** Called by the activity right after asking AppCompat to apply the language. */
+    fun languageApplied() {
+        _uiState.update { s -> s.copy(langSwitch = s.langSwitch?.copy(applied = true)) }
+    }
+
+    fun finishLanguageSwitch() {
+        _uiState.update {
+            it.copy(langSwitch = null, language = MmkvManager.decodeSettingsString(AppConfig.PREF_LANGUAGE) ?: "auto")
         }
     }
 }

@@ -59,23 +59,25 @@ tap "Empezar" 50 86; sleep 4; shot 07-inicio-sin-cuenta; texts inicio
 tap "Tengo un código de acceso" 50 93; sleep 2; shot 08-codigo
 adb shell input text "ABCD2345"; sleep 1; tap "Activar" 75 60; sleep 2; shot 09-codigo-respuesta
 tap "Cancelar" 55 60; sleep 2
-# language: English, then Russian, then back to Spanish
-tap "Idioma" 80 5; sleep 2; shot 10-idioma
-tap "English" 50 45; sleep 5; shot 11-home-ingles; texts ingles
-tap "Language" 80 5; sleep 2; tap "Русский" 50 50; sleep 5; shot 12-home-ruso; texts ruso
-tap "Язык" 80 5; sleep 2; tap "Español" 50 40; sleep 5
-# import a demo (non-working) server by link: the home switches to "has account"
-adb shell am start -a android.intent.action.VIEW -d "vpn360://install-config?url=vless%3A%2F%2F00000000-0000-4000-8000-000000000000%40203.0.113.10%3A443%3Fencryption%3Dnone%26security%3Dreality%26sni%3Dwww.samsung.com%26fp%3Dchrome%26pbk%3DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%26type%3Dtcp%26flow%3Dxtls-rprx-vision%23Servidor%2520Demo" > "$D/deeplink.txt" 2>&1
-sleep 8; shot 13-con-cuenta; texts con-cuenta
-# connect: VPN permission prompt, accept, connected screen
-tap "Conectar VPN" 50 45; sleep 3; shot 14-permiso-vpn
-tap "Aceptar" 75 60; sleep 2; tap "OK" 75 60; sleep 8; shot 15-conectado; texts conectado
-sleep 5; shot 16-conectado-timer
-tap "Desconectar VPN" 50 45; sleep 4; shot 17-desconectado
-# menu and advanced mode
-tap "Menú" 94 5; sleep 2; shot 18-menu
-tap "Modo avanzado" 40 30; sleep 4; shot 19-modo-avanzado
-adb shell input keyevent KEYCODE_BACK; sleep 3; shot 20-volver-inicio
+# language sheet and animated switch: English, then Russian, then back to Spanish
+tap "Idioma" 85 5; sleep 2; shot 10-idioma
+tap "English" 50 62; sleep 0.3; shot 11-cambio-idioma; sleep 4; shot 12-home-ingles; texts ingles
+tap "Language" 85 5; sleep 2; tap "Русский" 50 68; sleep 4; shot 13-home-ruso; texts ruso
+tap "Язык" 85 5; sleep 2; tap "Español" 50 56; sleep 4
+# a code from another VPN (unknown server key) is refused
+adb shell am start -a android.intent.action.VIEW -d "vpn360://install-config?url=vless%3A%2F%2F00000000-0000-4000-8000-000000000000%40203.0.113.10%3A443%3Fencryption%3Dnone%26security%3Dreality%26sni%3Dwww.samsung.com%26fp%3Dchrome%26pbk%3DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA%26type%3Dtcp%26flow%3Dxtls-rprx-vision%23Otra%2520VPN" > "$D/deeplink.txt" 2>&1
+sleep 2; shot 14-codigo-ajeno; sleep 4; texts codigo-ajeno
+# menu: information and updates (no advanced mode any more)
+tap "Menú" 94 5; sleep 2; shot 15-menu; texts menu
+tap "Información" 70 12; sleep 3; shot 16-informacion; texts informacion
+tap "Buscar actualizaciones" 50 50; sleep 8; shot 17-actualizaciones
+adb shell input keyevent KEYCODE_BACK; sleep 2
+# purchase screens (enabled once the account server exists; opened directly for a visual check)
+adb shell am start -n com.vpn360.app/com.v2ray.ang.ui.vpn360.BuyActivity --es vpn360_plan anual > "$D/compra.txt" 2>&1
+sleep 3; shot 18-compra-datos
+tap "Pagar con Mercado Pago" 50 80; sleep 2; shot 19-compra-validacion
+adb shell input keyevent KEYCODE_BACK; sleep 2; shot 20-compra-planes
+adb shell input keyevent KEYCODE_BACK; sleep 2; shot 21-volver-inicio
 
 echo "pid: $(adb shell pidof com.vpn360.app)" >> "$D/package.txt"
 adb logcat -d -v time > "$D/logcat-full.txt" 2>&1
@@ -103,9 +105,9 @@ adb shell pm clear com.vpn360.app >/dev/null 2>&1; sleep 2
 adb shell pm grant com.vpn360.app android.permission.POST_NOTIFICATIONS >/dev/null 2>&1
 adb logcat -c
 adb shell "am start -a android.intent.action.SEND -t text/plain --es android.intent.extra.TEXT '$LINK' -n com.vpn360.app/com.v2ray.ang.ui.UrlSchemeActivity" >/dev/null 2>&1
-sleep 10; shot 21-real-cuenta
+sleep 10; shot 22-real-cuenta
 tap "Conectar VPN" 50 47; sleep 3
-tap "Aceptar" 75 60; sleep 12; shot 22-real-conectado
+tap "Aceptar" 75 60; sleep 12; shot 23-real-conectado
 IP1=$(myip)
 {
   echo "antes de conectar: ip publica distinta al servidor = $([ -n "$IP0" ] && [ "$IP0" != "$HOSTIP" ] && echo si || echo no) (vacia=$([ -z "$IP0" ] && echo si || echo no))"

@@ -24,15 +24,17 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -70,6 +72,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -86,7 +89,6 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -109,14 +111,13 @@ import com.v2ray.ang.handler.SettingsManager
 import com.v2ray.ang.handler.SubscriptionUpdater
 import com.v2ray.ang.helper.MessageHelper
 import com.v2ray.ang.ui.base.HelperBaseComponentActivity
-import com.v2ray.ang.ui.main.MainActivity
 import com.v2ray.ang.util.LogUtil
 import com.v2ray.ang.util.Utils
 import kotlinx.coroutines.delay
 
 /**
  * VPN 360 home: one big button to connect, "scan code" to activate the account, and a small
- * menu for plans, language, support and the advanced (full v2rayNG) mode.
+ * menu (information and updates, language, support). There is no advanced mode for students.
  */
 class HomeActivity : HelperBaseComponentActivity() {
 
@@ -129,12 +130,15 @@ class HomeActivity : HelperBaseComponentActivity() {
 
     private val welcomeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK &&
-                result.data?.getStringExtra(WelcomeActivity.EXTRA_ACTION) == WelcomeActivity.ACTION_SCAN_QR
-            ) {
-                scanCode()
+            if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
+            when (result.data?.getStringExtra(WelcomeActivity.EXTRA_ACTION)) {
+                WelcomeActivity.ACTION_SCAN_QR -> scanCode()
+                WelcomeActivity.ACTION_BUY -> openBuy(result.data?.getStringExtra(WelcomeActivity.EXTRA_PLAN))
             }
         }
+
+    private val buyLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { viewModel.refresh() }
 
     private val vpnPermission =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -173,7 +177,6 @@ class HomeActivity : HelperBaseComponentActivity() {
     private fun handleImportIntent(intent: Intent?) {
         val link = intent?.getStringExtra(EXTRA_IMPORT) ?: return
         intent.removeExtra(EXTRA_IMPORT)
-        MmkvManager.encodeSettings(WelcomeActivity.PREF_ONBOARDED, true)
         viewModel.importConfig(link)
     }
 
@@ -199,25 +202,65 @@ class HomeActivity : HelperBaseComponentActivity() {
     override fun ScreenContent() {
         val uiState by viewModel.uiState.collectAsStateWithLifecycle()
         BackHandler { moveTaskToBack(false) }
-        HomeScreen(
-            uiState = uiState,
-            showPlans = BuildConfig.SHOW_PLANS,
-            hasSupport = BuildConfig.SALES_WHATSAPP.isNotEmpty(),
-            onPower = ::onPower,
-            onScan = ::scanCode,
-            onOpenCode = viewModel::openCodeDialog,
-            onCloseCode = viewModel::closeCodeDialog,
-            onSubmitCode = viewModel::activateCode,
-            onPlans = { welcomeLauncher.launch(Intent(this, WelcomeActivity::class.java)) },
-            onAdvanced = { startActivity(Intent(this, MainActivity::class.java).putExtra("vpn360_skip_welcome", true)) },
-            onSupport = ::openSupport,
-            onLanguage = { code -> AppLocaleManager.setApplicationLanguage(code) }
-        )
+
+        // Language change: cover the screen, apply the language (AppCompat rebuilds the
+        // activity behind the curtain), then reveal the screen in the new language.
+        val switch = uiState.langSwitch
+        LaunchedEffect(switch) {
+            if (switch == null) return@LaunchedEffect
+            if (!switch.applied) {
+                delay(420)
+                viewModel.languageApplied()
+                AppLocaleManager.setApplicationLanguage(switch.code)
+            } else {
+                delay(500)
+                viewModel.finishLanguageSwitch()
+            }
+        }
+        var lastSwitch by remember { mutableStateOf<LangSwitch?>(null) }
+        SideEffect { if (switch != null) lastSwitch = switch }
+        val shown = switch ?: lastSwitch
+
+        Box(Modifier.fillMaxSize()) {
+            HomeScreen(
+                uiState = uiState,
+                canRenew = BuildConfig.SHOW_PLANS && Vpn360Api.enabled,
+                hasSupport = BuildConfig.SALES_WHATSAPP.isNotEmpty(),
+                onPower = ::onPower,
+                onScan = ::scanCode,
+                onOpenCode = viewModel::openCodeDialog,
+                onCloseCode = viewModel::closeCodeDialog,
+                onSubmitCode = viewModel::activateCode,
+                onInfo = { startActivity(Intent(this@HomeActivity, AboutActivity::class.java)) },
+                onSupport = ::openSupport,
+                onRenew = ::renew,
+                onLanguage = { option -> viewModel.startLanguageSwitch(option.code, option.native, option.greeting) }
+            )
+            LanguageOverlay(
+                visible = switch != null,
+                label = shown?.label.orEmpty(),
+                greeting = shown?.greeting.orEmpty()
+            )
+        }
     }
 
     private fun scanCode() {
         launchQRCodeScanner { result ->
             if (!result.isNullOrBlank()) viewModel.onScanned(result)
+        }
+    }
+
+    private fun openBuy(planId: String?) {
+        if (!Vpn360Api.enabled) return
+        buyLauncher.launch(Intent(this, BuyActivity::class.java).putExtra(BuyActivity.EXTRA_PLAN, planId))
+    }
+
+    /** Expired plan: buy again in the app (direct download) or on the website (Google Play). */
+    private fun renew() {
+        when {
+            BuildConfig.SHOW_PLANS && Vpn360Api.enabled -> openBuy(null)
+            Vpn360Api.enabled -> openUrl(BuildConfig.CENTRAL_URL.trimEnd('/') + "/cuenta")
+            else -> openSupport()
         }
     }
 
@@ -250,12 +293,17 @@ class HomeActivity : HelperBaseComponentActivity() {
 
     private fun openSupport() {
         if (BuildConfig.SALES_WHATSAPP.isEmpty()) return
-        try {
-            val url = "https://wa.me/" + BuildConfig.SALES_WHATSAPP + "?text=" +
+        openUrl(
+            "https://wa.me/" + BuildConfig.SALES_WHATSAPP + "?text=" +
                 Uri.encode(getString(R.string.vpn360_whatsapp_help_msg))
+        )
+    }
+
+    private fun openUrl(url: String) {
+        try {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
         } catch (e: Exception) {
-            LogUtil.e(AppConfig.TAG, "Cannot open WhatsApp", e)
+            LogUtil.e(AppConfig.TAG, "Cannot open $url", e)
         }
     }
 }
@@ -265,18 +313,19 @@ class HomeActivity : HelperBaseComponentActivity() {
 @Composable
 private fun HomeScreen(
     uiState: HomeUiState,
-    showPlans: Boolean,
+    canRenew: Boolean,
     hasSupport: Boolean,
     onPower: () -> Unit,
     onScan: () -> Unit,
     onOpenCode: () -> Unit,
     onCloseCode: () -> Unit,
     onSubmitCode: (String) -> Unit,
-    onPlans: () -> Unit,
-    onAdvanced: () -> Unit,
+    onInfo: () -> Unit,
     onSupport: () -> Unit,
-    onLanguage: (String) -> Unit
+    onRenew: () -> Unit,
+    onLanguage: (LangOption) -> Unit
 ) {
+    var languageOpen by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -285,13 +334,19 @@ private fun HomeScreen(
             .navigationBarsPadding()
     ) {
         HomeTopBar(
-            showPlans = showPlans,
+            language = uiState.language,
             hasSupport = hasSupport,
-            onPlans = onPlans,
-            onAdvanced = onAdvanced,
+            onInfo = onInfo,
             onSupport = onSupport,
-            onLanguage = onLanguage
+            onLanguage = { languageOpen = true }
         )
+        AnimatedVisibility(
+            visible = uiState.updateVersion != null,
+            enter = expandVertically() + fadeIn(),
+            exit = shrinkVertically() + fadeOut()
+        ) {
+            UpdateBanner(version = uiState.updateVersion.orEmpty(), onClick = onInfo)
+        }
 
         Column(
             modifier = Modifier
@@ -312,6 +367,13 @@ private fun HomeScreen(
             StatusTexts(uiState)
         }
 
+        AnimatedVisibility(
+            visible = uiState.expired && uiState.hasAccount,
+            enter = expandVertically() + fadeIn(),
+            exit = shrinkVertically() + fadeOut()
+        ) {
+            ExpiredCard(canRenew = canRenew || hasSupport, onRenew = onRenew)
+        }
         BottomActions(uiState, onScan, onOpenCode)
     }
 
@@ -323,20 +385,29 @@ private fun HomeScreen(
             onSubmit = onSubmitCode
         )
     }
+    if (languageOpen) {
+        LanguageSheet(
+            current = uiState.language,
+            onDismiss = { languageOpen = false },
+            onSelect = { option ->
+                languageOpen = false
+                onLanguage(option)
+            }
+        )
+    }
 }
 
 @Composable
 private fun HomeTopBar(
-    showPlans: Boolean,
+    language: String,
     hasSupport: Boolean,
-    onPlans: () -> Unit,
-    onAdvanced: () -> Unit,
+    onInfo: () -> Unit,
     onSupport: () -> Unit,
-    onLanguage: (String) -> Unit
+    onLanguage: () -> Unit
 ) {
     var menuOpen by remember { mutableStateOf(false) }
-    var languageOpen by remember { mutableStateOf(false) }
     val primary = MaterialTheme.colorScheme.primary
+    val badge = langOptions.firstOrNull { it.code == language }?.badge
 
     Row(
         modifier = Modifier
@@ -360,12 +431,27 @@ private fun HomeTopBar(
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.weight(1f)
         )
-        IconButton(onClick = { languageOpen = true }) {
-            Icon(
-                painterResource(R.drawable.ic_translate_24dp),
-                contentDescription = stringResource(R.string.vpn360_language),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+        Surface(
+            onClick = onLanguage,
+            shape = RoundedCornerShape(50),
+            color = MaterialTheme.colorScheme.surface,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+        ) {
+            Row(
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painterResource(R.drawable.ic_translate_24dp),
+                    contentDescription = stringResource(R.string.vpn360_language),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(18.dp)
+                )
+                if (badge != null) {
+                    Spacer(Modifier.width(4.dp))
+                    Text(badge, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
         }
         Box {
             IconButton(onClick = { menuOpen = true }) {
@@ -377,9 +463,14 @@ private fun HomeTopBar(
             }
             DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
                 DropdownMenuItem(
-                    text = { Text(stringResource(if (showPlans) R.string.vpn360_menu_plans else R.string.vpn360_plans_help)) },
-                    leadingIcon = { Icon(painterResource(R.drawable.ic_promotion_24dp), contentDescription = null) },
-                    onClick = { menuOpen = false; onPlans() }
+                    text = { Text(stringResource(R.string.vpn360_menu_info)) },
+                    leadingIcon = { Icon(painterResource(R.drawable.ic_check_update_24dp), contentDescription = null) },
+                    onClick = { menuOpen = false; onInfo() }
+                )
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.vpn360_language)) },
+                    leadingIcon = { Icon(painterResource(R.drawable.ic_translate_24dp), contentDescription = null) },
+                    onClick = { menuOpen = false; onLanguage() }
                 )
                 if (hasSupport) {
                     DropdownMenuItem(
@@ -388,57 +479,75 @@ private fun HomeTopBar(
                         onClick = { menuOpen = false; onSupport() }
                     )
                 }
-                DropdownMenuItem(
-                    text = { Text(stringResource(R.string.vpn360_language)) },
-                    leadingIcon = { Icon(painterResource(R.drawable.ic_translate_24dp), contentDescription = null) },
-                    onClick = { menuOpen = false; languageOpen = true }
-                )
-                DropdownMenuItem(
-                    text = { Text(stringResource(R.string.vpn360_menu_advanced)) },
-                    leadingIcon = { Icon(painterResource(R.drawable.ic_settings_24dp), contentDescription = null) },
-                    onClick = { menuOpen = false; onAdvanced() }
-                )
             }
         }
-    }
-
-    if (languageOpen) {
-        LanguageDialog(
-            onDismiss = { languageOpen = false },
-            onSelect = { code -> languageOpen = false; onLanguage(code) }
-        )
     }
 }
 
 @Composable
-private fun LanguageDialog(onDismiss: () -> Unit, onSelect: (String) -> Unit) {
-    val options = listOf(
-        "es" to "Español",
-        "en" to "English",
-        "ru" to "Русский",
-        "auto" to stringResource(R.string.vpn360_language_auto)
-    )
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.vpn360_language)) },
-        text = {
-            Column {
-                options.forEach { (code, label) ->
-                    Text(
-                        label,
-                        fontSize = 17.sp,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
-                            .clickable(role = Role.Button) { onSelect(code) }
-                            .padding(horizontal = 12.dp, vertical = 14.dp)
-                    )
-                }
+private fun UpdateBanner(version: String, onClick: () -> Unit) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(14.dp),
+        color = MaterialTheme.colorScheme.tertiaryContainer,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 4.dp)
+    ) {
+        Row(modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                painterResource(R.drawable.ic_check_update_24dp),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onTertiaryContainer,
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(Modifier.width(10.dp))
+            Text(
+                stringResource(R.string.vpn360_update_banner, version),
+                color = MaterialTheme.colorScheme.onTertiaryContainer,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+    }
+}
+
+@Composable
+private fun ExpiredCard(canRenew: Boolean, onRenew: () -> Unit) {
+    Surface(
+        shape = RoundedCornerShape(18.dp),
+        color = MaterialTheme.colorScheme.primaryContainer,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 6.dp)
+    ) {
+        Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                Text(
+                    stringResource(R.string.vpn360_expired_title),
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                Text(
+                    stringResource(R.string.vpn360_expired_text),
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
             }
-        },
-        confirmButton = {},
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.vpn360_cancel)) } }
-    )
+            if (canRenew) {
+                Spacer(Modifier.width(10.dp))
+                Button(
+                    onClick = onRenew,
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    )
+                ) { Text(stringResource(R.string.vpn360_renew), fontWeight = FontWeight.Bold) }
+            }
+        }
+    }
 }
 
 @Composable

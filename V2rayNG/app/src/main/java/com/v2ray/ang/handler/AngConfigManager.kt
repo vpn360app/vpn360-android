@@ -179,7 +179,9 @@ object AngConfigManager {
      * @param append Whether to append the configurations.
      * @return A pair containing the number of configurations and subscriptions imported.
      */
-    fun importBatchConfig(server: String?, subid: String, append: Boolean): Pair<Int, Int> {
+    fun importBatchConfig(input: String?, subid: String, append: Boolean): Pair<Int, Int> {
+        // VPN 360: only our own servers and subscriptions can be imported
+        val server = Vpn360Policy.filter(input) ?: return 0 to 0
         return try {
             var count = parseBatchConfig(Utils.decode(server), subid, append)
             if (count <= 0) {

@@ -11,7 +11,6 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -30,16 +29,11 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -77,16 +71,18 @@ class WelcomeActivity : BaseComponentActivity() {
         const val EXTRA_CONFIG = "vpn360_config"
         const val ACTION_IMPORT = "import"
         const val ACTION_SCAN_QR = "scan_qr"
+        const val ACTION_BUY = "buy"
+        const val EXTRA_PLAN = "vpn360_plan"
         const val PREF_ONBOARDED = "vpn360_onboarded"
     }
 
     @Composable
     override fun ScreenContent() {
-        val canBuy = BuildConfig.CENTRAL_URL.isNotEmpty() || BuildConfig.SALES_WHATSAPP.isNotEmpty()
+        val canBuy = Vpn360Api.enabled || BuildConfig.SALES_WHATSAPP.isNotEmpty()
         WelcomeScreen(
             showPlans = BuildConfig.SHOW_PLANS,
             canBuy = canBuy,
-            onChoosePlan = { planName, planId -> openPlan(planName, planId) },
+            onChoosePlan = { plan -> openPlan(plan) },
             onFinish = { scan -> finishWelcome(scan) }
         )
     }
@@ -101,15 +97,19 @@ class WelcomeActivity : BaseComponentActivity() {
         finish()
     }
 
-    private fun openPlan(planName: String, planId: String) {
+    /** Buying happens inside the app (BuyActivity, opened by the home); WhatsApp as a fallback. */
+    private fun openPlan(plan: PlanUi) {
         when {
-            BuildConfig.CENTRAL_URL.isNotEmpty() ->
-                openUrl(BuildConfig.CENTRAL_URL.trimEnd('/') + "/?plan=" + planId)
+            Vpn360Api.enabled -> {
+                MmkvManager.encodeSettings(PREF_ONBOARDED, true)
+                setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_ACTION, ACTION_BUY).putExtra(EXTRA_PLAN, plan.id))
+                finish()
+            }
 
             BuildConfig.SALES_WHATSAPP.isNotEmpty() ->
                 openUrl(
                     "https://wa.me/" + BuildConfig.SALES_WHATSAPP + "?text=" +
-                        Uri.encode(getString(R.string.vpn360_whatsapp_plan_msg, planName))
+                        Uri.encode(getString(R.string.vpn360_whatsapp_plan_msg, getString(plan.name)))
                 )
         }
     }
@@ -139,7 +139,7 @@ private val benefits = listOf(
 private fun WelcomeScreen(
     showPlans: Boolean,
     canBuy: Boolean,
-    onChoosePlan: (String, String) -> Unit,
+    onChoosePlan: (PlanUi) -> Unit,
     onFinish: (Boolean) -> Unit
 ) {
     val pageCount = benefits.size + if (showPlans) 1 else 0
@@ -175,7 +175,7 @@ private fun WelcomeScreen(
             if (page < benefits.size) {
                 BenefitPage(benefits[page])
             } else {
-                PlansPage(canBuy = canBuy, onChoosePlan = onChoosePlan)
+                PlansList(canBuy = canBuy, onChoosePlan = onChoosePlan, modifier = Modifier.fillMaxSize())
             }
         }
 
@@ -344,102 +344,6 @@ private fun DrawScope.drawBenefitIcon(icon: BenefitIcon, color: Color) {
                 topLeft = Offset(c.x - r, c.y - r + w * 0.05f), size = Size(r * 2, r * 2), style = stroke
             )
             drawLine(color, Offset(c.x, w * 0.08f), Offset(c.x, w * 0.46f), strokeWidth = stroke.width, cap = stroke.cap)
-        }
-    }
-}
-
-private data class PlanUi(val id: String, val name: Int, val price: String, val bill: Int, val badge: Int?, val highlight: Boolean)
-
-private val generalPlans = listOf(
-    PlanUi("mensual", R.string.vpn360_plan_monthly, "S/ 19.90", R.string.vpn360_bill_monthly, null, false),
-    PlanUi("semestral", R.string.vpn360_plan_6m, "S/ 15.90", R.string.vpn360_bill_6m, R.string.vpn360_save_20, false),
-    PlanUi("anual", R.string.vpn360_plan_annual, "S/ 10.90", R.string.vpn360_bill_annual, R.string.vpn360_save_45, true)
-)
-
-private val studentPlan =
-    PlanUi("estudiante", R.string.vpn360_plan_student, "S/ 14.90", R.string.vpn360_bill_student, R.string.vpn360_exclusive, false)
-
-@Composable
-private fun PlansPage(canBuy: Boolean, onChoosePlan: (String, String) -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        Text(
-            stringResource(R.string.vpn360_plans_title),
-            fontSize = 26.sp,
-            fontWeight = FontWeight.ExtraBold,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-        generalPlans.forEach { plan -> PlanCard(plan, canBuy, onChoosePlan) }
-        Text(
-            stringResource(R.string.vpn360_student_title),
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(top = 6.dp),
-            color = MaterialTheme.colorScheme.onBackground
-        )
-        PlanCard(studentPlan, canBuy, onChoosePlan)
-        Text(
-            stringResource(R.string.vpn360_student_note),
-            fontSize = 13.sp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Spacer(Modifier.height(8.dp))
-    }
-}
-
-@Composable
-private fun PlanCard(plan: PlanUi, canBuy: Boolean, onChoosePlan: (String, String) -> Unit) {
-    val primary = MaterialTheme.colorScheme.primary
-    val name = stringResource(plan.name)
-    OutlinedCard(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.outlinedCardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = BorderStroke(
-            if (plan.highlight) 2.dp else 1.dp,
-            if (plan.highlight) primary else MaterialTheme.colorScheme.outlineVariant
-        )
-    ) {
-        Column(Modifier.padding(16.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(name, fontWeight = FontWeight.Bold, fontSize = 18.sp, modifier = Modifier.weight(1f))
-                if (plan.badge != null) {
-                    Surface(shape = RoundedCornerShape(50), color = MaterialTheme.colorScheme.tertiary) {
-                        Text(
-                            stringResource(plan.badge),
-                            color = MaterialTheme.colorScheme.onTertiary,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                        )
-                    }
-                }
-            }
-            Row(verticalAlignment = Alignment.Bottom) {
-                Text(plan.price, color = primary, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold)
-                Text(
-                    stringResource(R.string.vpn360_per_month),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 15.sp,
-                    modifier = Modifier.padding(bottom = 5.dp)
-                )
-            }
-            Text(stringResource(plan.bill), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
-            Spacer(Modifier.height(10.dp))
-            Button(
-                onClick = { onChoosePlan(name, plan.id) },
-                enabled = canBuy,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = primary, contentColor = MaterialTheme.colorScheme.onPrimary)
-            ) {
-                Text(stringResource(if (canBuy) R.string.vpn360_choose_plan else R.string.vpn360_soon))
-            }
         }
     }
 }
