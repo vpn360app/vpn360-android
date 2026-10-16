@@ -140,6 +140,15 @@ class HomeActivity : HelperBaseComponentActivity() {
     private val buyLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { viewModel.refresh() }
 
+    private val myPlanLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
+            when (result.data?.getStringExtra(MyPlanActivity.EXTRA_ACTION)) {
+                MyPlanActivity.ACTION_HOW -> openWelcome()
+                MyPlanActivity.ACTION_BUY -> openBuy(result.data?.getStringExtra(MyPlanActivity.EXTRA_PLAN))
+            }
+        }
+
     private val vpnPermission =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -232,6 +241,8 @@ class HomeActivity : HelperBaseComponentActivity() {
                 onCloseCode = viewModel::closeCodeDialog,
                 onSubmitCode = viewModel::activateCode,
                 onInfo = { startActivity(Intent(this@HomeActivity, AboutActivity::class.java)) },
+                onMyPlan = { myPlanLauncher.launch(Intent(this@HomeActivity, MyPlanActivity::class.java)) },
+                onHow = ::openWelcome,
                 onSupport = ::openSupport,
                 onRenew = ::renew,
                 onLanguage = { option -> viewModel.startLanguageSwitch(option.code, option.native, option.greeting) }
@@ -248,6 +259,11 @@ class HomeActivity : HelperBaseComponentActivity() {
         launchQRCodeScanner { result ->
             if (!result.isNullOrBlank()) viewModel.onScanned(result)
         }
+    }
+
+    /** The welcome pages: what VPN 360 is for, then the plans. */
+    private fun openWelcome() {
+        welcomeLauncher.launch(Intent(this, WelcomeActivity::class.java))
     }
 
     private fun openBuy(planId: String?) {
@@ -321,6 +337,8 @@ private fun HomeScreen(
     onCloseCode: () -> Unit,
     onSubmitCode: (String) -> Unit,
     onInfo: () -> Unit,
+    onMyPlan: () -> Unit,
+    onHow: () -> Unit,
     onSupport: () -> Unit,
     onRenew: () -> Unit,
     onLanguage: (LangOption) -> Unit
@@ -337,6 +355,8 @@ private fun HomeScreen(
             language = uiState.language,
             hasSupport = hasSupport,
             onInfo = onInfo,
+            onMyPlan = onMyPlan,
+            onHow = onHow,
             onSupport = onSupport,
             onLanguage = { languageOpen = true }
         )
@@ -402,6 +422,8 @@ private fun HomeTopBar(
     language: String,
     hasSupport: Boolean,
     onInfo: () -> Unit,
+    onMyPlan: () -> Unit,
+    onHow: () -> Unit,
     onSupport: () -> Unit,
     onLanguage: () -> Unit
 ) {
@@ -462,6 +484,16 @@ private fun HomeTopBar(
                 )
             }
             DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.vpn360_menu_my_plan)) },
+                    leadingIcon = { Icon(painterResource(R.drawable.ic_subscriptions_24dp), contentDescription = null) },
+                    onClick = { menuOpen = false; onMyPlan() }
+                )
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.vpn360_menu_how)) },
+                    leadingIcon = { Icon(painterResource(R.drawable.ic_promotion_24dp), contentDescription = null) },
+                    onClick = { menuOpen = false; onHow() }
+                )
                 DropdownMenuItem(
                     text = { Text(stringResource(R.string.vpn360_menu_info)) },
                     leadingIcon = { Icon(painterResource(R.drawable.ic_check_update_24dp), contentDescription = null) },

@@ -104,7 +104,10 @@ data class BuyUiState(
     val busy: Boolean = false,
     val errorRes: Int? = null,
     val errorText: String? = null,
-    val checkoutUrl: String? = null
+    val checkoutUrl: String? = null,
+    val accessCode: String? = null,
+    val plans: List<PlanUi> = emptyList(),
+    val rate: Double = 3.45
 )
 
 /**
@@ -125,6 +128,8 @@ class BuyViewModel(application: Application) : BaseViewModel(application) {
                 name = MmkvManager.decodeSettingsString(Vpn360Api.PREF_BUYER_NAME).orEmpty(),
                 email = MmkvManager.decodeSettingsString(Vpn360Api.PREF_BUYER_EMAIL).orEmpty(),
                 whatsapp = MmkvManager.decodeSettingsString(Vpn360Api.PREF_BUYER_WHATS).orEmpty(),
+                plans = PriceBook.plans,
+                rate = PriceBook.rate,
                 planId = planById(planId)?.id,
                 step = if (planById(planId) != null) BuyStep.Form else BuyStep.Plans
             )
@@ -154,7 +159,7 @@ class BuyViewModel(application: Application) : BaseViewModel(application) {
     /** Validates, asks the server for the checkout page and returns it to the activity to open. */
     fun pay(lang: String, onCheckout: (String) -> Unit) {
         val s = _uiState.value
-        val plan = planById(s.planId) ?: return
+        val plan = planById(s.planId, s.plans) ?: return
         val name = s.name.trim()
         val email = s.email.trim().lowercase()
         val whats = s.whatsapp.trim()
@@ -213,7 +218,7 @@ class BuyViewModel(application: Application) : BaseViewModel(application) {
                         MmkvManager.decodeAllServerList().firstOrNull()?.let { MmkvManager.setSelectServer(it) }
                         MmkvManager.encodeSettings(WelcomeActivity.PREF_ONBOARDED, true)
                         clearPending()
-                        _uiState.update { it.copy(step = BuyStep.Done) }
+                        _uiState.update { it.copy(step = BuyStep.Done, accessCode = order.accessCode) }
                         return@launch
                     }
                 }
@@ -348,10 +353,13 @@ private fun BuyScreen(
             modifier = Modifier.weight(1f)
         ) { step ->
             when (step) {
-                BuyStep.Plans -> PlansList(canBuy = true, onChoosePlan = onChoosePlan, modifier = Modifier.fillMaxSize())
+                BuyStep.Plans -> PlansList(
+                    canBuy = true, onChoosePlan = onChoosePlan, modifier = Modifier.fillMaxSize(),
+                    plans = state.plans, rate = state.rate
+                )
                 BuyStep.Form -> BuyForm(state, onEdit, onTerms, onPay)
                 BuyStep.Waiting -> WaitingPane(onOpenCheckout, onCancelWaiting, canReopen = state.checkoutUrl != null)
-                BuyStep.Done -> DonePane(onDone)
+                BuyStep.Done -> DonePane(state.accessCode, onDone)
             }
         }
     }
@@ -364,7 +372,7 @@ private fun BuyForm(
     onTerms: () -> Unit,
     onPay: () -> Unit
 ) {
-    val plan = planById(state.planId) ?: return
+    val plan = planById(state.planId, state.plans) ?: return
     val primary = MaterialTheme.colorScheme.primary
     Column(
         modifier = Modifier
@@ -382,9 +390,14 @@ private fun BuyForm(
             Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
                     Text(stringResource(plan.name), fontWeight = FontWeight.Bold, fontSize = 17.sp)
-                    Text(stringResource(plan.bill), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(billingLine(plan, state.rate), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(
+                        stringResource(R.string.vpn360_pen_note, pen(plan.perMonth)),
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
-                Text(plan.price, color = primary, fontWeight = FontWeight.ExtraBold, fontSize = 22.sp)
+                Text(usd(plan.perMonth, state.rate), color = primary, fontWeight = FontWeight.ExtraBold, fontSize = 22.sp)
                 Text(stringResource(R.string.vpn360_per_month), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp)
             }
         }
@@ -506,7 +519,7 @@ private fun WaitingPane(onOpenCheckout: () -> Unit, onCancel: () -> Unit, canReo
 }
 
 @Composable
-private fun DonePane(onDone: () -> Unit) {
+private fun DonePane(accessCode: String?, onDone: () -> Unit) {
     val primary = MaterialTheme.colorScheme.tertiary
     val onColor = MaterialTheme.colorScheme.onTertiary
     val draw = rememberInfiniteTransition(label = "done")
@@ -539,6 +552,31 @@ private fun DonePane(onDone: () -> Unit) {
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
         )
+        if (!accessCode.isNullOrEmpty()) {
+            Spacer(Modifier.height(18.dp))
+            Text(stringResource(R.string.vpn360_access_code_label), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Surface(
+                shape = RoundedCornerShape(14.dp),
+                color = MaterialTheme.colorScheme.surface,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.tertiary),
+                modifier = Modifier.padding(top = 6.dp)
+            ) {
+                Text(
+                    accessCode,
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    letterSpacing = 4.sp,
+                    modifier = Modifier.padding(horizontal = 22.dp, vertical = 10.dp)
+                )
+            }
+            Text(
+                stringResource(R.string.vpn360_code_sent),
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 6.dp)
+            )
+        }
         Spacer(Modifier.height(24.dp))
         Button(
             onClick = onDone,

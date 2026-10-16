@@ -78,6 +78,12 @@ sleep 3; shot 18-compra-datos
 tap "Pagar con Mercado Pago" 50 80; sleep 2; shot 19-compra-validacion
 adb shell input keyevent KEYCODE_BACK; sleep 2; shot 20-compra-planes
 adb shell input keyevent KEYCODE_BACK; sleep 2; shot 21-volver-inicio
+# "Mi plan" (no account yet: plans in dollars and soles) and the how-it-works pages
+tap "Menú" 94 5; sleep 2; tap "Mi plan" 70 12; sleep 4; shot 22-mi-plan; texts mi-plan
+adb shell input swipe $((W/2)) $((H*80/100)) $((W/2)) $((H*20/100)) 400; sleep 2; shot 23-mi-plan-planes
+adb shell input keyevent KEYCODE_BACK; sleep 2
+tap "Menú" 94 5; sleep 2; tap "Cómo funciona y planes" 70 18; sleep 3; shot 24-como-funciona
+adb shell input keyevent KEYCODE_BACK; sleep 2
 
 echo "pid: $(adb shell pidof com.vpn360.app)" >> "$D/package.txt"
 adb logcat -d -v time > "$D/logcat-full.txt" 2>&1
@@ -105,9 +111,9 @@ adb shell pm clear com.vpn360.app >/dev/null 2>&1; sleep 2
 adb shell pm grant com.vpn360.app android.permission.POST_NOTIFICATIONS >/dev/null 2>&1
 adb logcat -c
 adb shell "am start -a android.intent.action.SEND -t text/plain --es android.intent.extra.TEXT '$LINK' -n com.vpn360.app/com.v2ray.ang.ui.UrlSchemeActivity" >/dev/null 2>&1
-sleep 10; shot 22-real-cuenta
+sleep 10; shot 25-real-cuenta
 tap "Conectar VPN" 50 47; sleep 3
-tap "Aceptar" 75 60; sleep 12; shot 23-real-conectado
+tap "Aceptar" 75 60; sleep 12; shot 26-real-conectado
 IP1=$(myip)
 {
   echo "antes de conectar: ip publica distinta al servidor = $([ -n "$IP0" ] && [ "$IP0" != "$HOSTIP" ] && echo si || echo no) (vacia=$([ -z "$IP0" ] && echo si || echo no))"

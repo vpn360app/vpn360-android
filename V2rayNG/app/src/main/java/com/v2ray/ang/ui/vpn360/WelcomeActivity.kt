@@ -76,6 +76,9 @@ class WelcomeActivity : BaseComponentActivity() {
         const val PREF_ONBOARDED = "vpn360_onboarded"
     }
 
+    private val plans by lazy { PriceBook.plans }
+    private val rate by lazy { PriceBook.rate }
+
     @Composable
     override fun ScreenContent() {
         val canBuy = Vpn360Api.enabled || BuildConfig.SALES_WHATSAPP.isNotEmpty()
@@ -83,6 +86,8 @@ class WelcomeActivity : BaseComponentActivity() {
             showPlans = BuildConfig.SHOW_PLANS,
             canBuy = canBuy,
             onChoosePlan = { plan -> openPlan(plan) },
+            plans = plans,
+            rate = rate,
             onFinish = { scan -> finishWelcome(scan) }
         )
     }
@@ -140,6 +145,8 @@ private fun WelcomeScreen(
     showPlans: Boolean,
     canBuy: Boolean,
     onChoosePlan: (PlanUi) -> Unit,
+    plans: List<PlanUi>,
+    rate: Double,
     onFinish: (Boolean) -> Unit
 ) {
     val pageCount = benefits.size + if (showPlans) 1 else 0
@@ -175,7 +182,10 @@ private fun WelcomeScreen(
             if (page < benefits.size) {
                 BenefitPage(benefits[page])
             } else {
-                PlansList(canBuy = canBuy, onChoosePlan = onChoosePlan, modifier = Modifier.fillMaxSize())
+                PlansList(
+                    canBuy = canBuy, onChoosePlan = onChoosePlan, modifier = Modifier.fillMaxSize(),
+                    plans = plans, rate = rate
+                )
             }
         }
 

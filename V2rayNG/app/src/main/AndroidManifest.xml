@@ -221,6 +221,9 @@
             android:name=".ui.vpn360.AboutActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.vpn360.MyPlanActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.vpn360.BuyActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />

@@ -105,6 +105,7 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
             checkPendingOrder()
             checkAccountStatus(force = false)
             checkUpdateIfDue()
+            refreshPricesIfDue()
         }
     }
 
@@ -292,6 +293,16 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
         } catch (e: Exception) {
             LogUtil.e(AppConfig.TAG, "VPN 360 update check failed", e)
         }
+    }
+
+    private var lastPrices = 0L
+
+    /** Keeps the prices and the dollar rate shown by the app in line with the account server. */
+    private fun refreshPricesIfDue() {
+        val now = System.currentTimeMillis()
+        if (!Vpn360Api.enabled || now - lastPrices < 6 * 3600_000L) return
+        lastPrices = now
+        Vpn360Api.refreshPlans(localizedContext.resources.configuration.locales[0].language)
     }
 
     // ---------------- language ----------------

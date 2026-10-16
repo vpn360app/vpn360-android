@@ -107,7 +107,13 @@ object Vpn360Api {
         }
     }
 
-    data class OrderResult(val known: Boolean, val active: Boolean, val subUrl: String?, val failed: Boolean = false)
+    data class OrderResult(
+        val known: Boolean,
+        val active: Boolean,
+        val subUrl: String?,
+        val failed: Boolean = false,
+        val accessCode: String? = null
+    )
 
     fun order(ref: String): OrderResult {
         if (!enabled) return OrderResult(known = false, active = false, subUrl = null, failed = true)
@@ -122,7 +128,8 @@ object Vpn360Api {
                     OrderResult(
                         known = true,
                         active = json.optBoolean("active") && Vpn360Policy.isOurSubscription(sub),
-                        subUrl = sub.takeIf { Vpn360Policy.isOurSubscription(it) }
+                        subUrl = sub.takeIf { Vpn360Policy.isOurSubscription(it) },
+                        accessCode = json.optString("access_code").takeIf { it.isNotEmpty() }
                     )
                 }
             }
@@ -140,6 +147,67 @@ object Vpn360Api {
             .firstOrNull { Vpn360Policy.isOurSubscription(it) } ?: return null
         return sub.substringAfter("/s/").substringBefore('?').substringBefore('#').takeIf { it.isNotBlank() }
     }
+
+    // ---- "Mi plan" ----
+
+    data class AccountInfo(
+        val planId: String,
+        val planName: String,
+        val status: String,
+        val active: Boolean,
+        val expiresAt: Long,
+        val nextCharge: Long,
+        val autoRenew: Boolean,
+        val amountPen: Double,
+        val amountUsd: Double,
+        val billing: String,
+        val accessCode: String
+    )
+
+    /** The account's plan as the server sees it; null when it cannot be read. */
+    fun account(lang: String): AccountInfo? {
+        if (!enabled) return null
+        val token = accountToken() ?: return null
+        return try {
+            val r = call("GET", "/api/app/status?lang=$lang&token=" + URLEncoder.encode(token, "UTF-8"))
+            val j = r.json ?: return null
+            if (r.status !in 200..299) return null
+            AccountInfo(
+                planId = j.optString("plan"),
+                planName = j.optString("plan_name"),
+                status = j.optString("status"),
+                active = j.optBoolean("active"),
+                expiresAt = j.optLong("expires_at"),
+                nextCharge = j.optLong("next_charge"),
+                autoRenew = j.optBoolean("auto_renew"),
+                amountPen = j.optDouble("amount_pen", 0.0),
+                amountUsd = j.optDouble("amount_usd", 0.0),
+                billing = j.optString("billing"),
+                accessCode = j.optString("access_code")
+            )
+        } catch (e: Exception) {
+            LogUtil.e(AppConfig.TAG, "VPN 360 account read failed", e)
+            null
+        }
+    }
+
+    /** Fetches current prices and the exchange rate; true when they were saved. */
+    fun refreshPlans(lang: String): Boolean {
+        if (!enabled) return false
+        return try {
+            val r = call("GET", "/api/app/plans?lang=$lang")
+            val j = r.json ?: return false
+            if (r.status !in 200..299) return false
+            PriceBook.save(j.toString())
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    /** The subscription link of this phone's account, for using it on a computer or iPhone. */
+    fun subscriptionUrl(): String? = MmkvManager.decodeSubscriptions().map { it.subscription.url }
+        .firstOrNull { Vpn360Policy.isOurSubscription(it) }
 
     /** null when unknown (offline, no account server, or a direct test link). */
     fun isAccountActive(): Boolean? {
