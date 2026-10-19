@@ -67,6 +67,9 @@ object Vpn360Policy {
         if (text.isNullOrBlank()) return null
         val direct = text.lines().map { it.trim() }.filter { it.isNotEmpty() && isAllowedLine(it) }
         if (direct.isNotEmpty()) return direct.joinToString("\n")
+        // A single link split by line breaks when copied from a terminal or a chat
+        val joined = text.filterNot { it.isWhitespace() }
+        if (joined.contains("://") && isAllowedLine(joined)) return joined
         val decoded = Utils.decode(text.trim())
         val fromBase64 = decoded.lines().map { it.trim() }.filter { it.isNotEmpty() && isAllowedLine(it) }
         return if (fromBase64.isNotEmpty()) fromBase64.joinToString("\n") else null

@@ -860,7 +860,7 @@ private fun CodeDialog(busy: Boolean, error: Int?, onDismiss: () -> Unit, onSubm
                     value = code,
                     onValueChange = { v ->
                         // A pasted link is kept as is; a typed access code is normalised
-                        code = if (v.contains("://")) v.trim().take(4096)
+                        code = if (v.contains("://")) v.filterNot { it.isWhitespace() }.take(4096)
                         else v.uppercase().filter { it.isLetterOrDigit() || it == '-' || it == ' ' }.take(24)
                     },
                     label = { Text(stringResource(R.string.vpn360_code_hint)) },

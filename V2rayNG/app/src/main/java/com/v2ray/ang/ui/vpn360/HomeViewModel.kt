@@ -226,7 +226,8 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
         val value = text.trim()
         if (value.contains("://")) {
             closeCodeDialog()
-            onScanned(value)
+            // Links never contain spaces: copying from a terminal or chat can add line breaks
+            onScanned(value.filterNot { it.isWhitespace() })
         } else {
             activateCode(value)
         }
