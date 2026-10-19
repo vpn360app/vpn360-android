@@ -84,6 +84,14 @@ adb shell input swipe $((W/2)) $((H*80/100)) $((W/2)) $((H*20/100)) 400; sleep 2
 adb shell input keyevent KEYCODE_BACK; sleep 2
 tap "Menú" 94 5; sleep 2; tap "Cómo funciona y planes" 70 18; sleep 3; shot 24-como-funciona
 adb shell input keyevent KEYCODE_BACK; sleep 2
+# UDP route (Hysteria2): a link to another host is refused; one to our server (obfuscated, pinned) is accepted.
+# Fake secrets: this only checks the app's link policy and import, not a connection.
+HYQ='/?sni=s0000.net&obfs=salamander&obfs-password=00112233445566778899aabbccddeeff&pinSHA256=0000000000000000000000000000000000000000000000000000000000000000#VPN%20360%20UDP'
+adb shell "am start -a android.intent.action.SEND -t text/plain --es android.intent.extra.TEXT 'hysteria2://0123456789abcdef@203.0.113.10:443$HYQ' -n com.vpn360.app/com.v2ray.ang.ui.UrlSchemeActivity" >/dev/null 2>&1
+sleep 2; shot 25-udp-ajeno; sleep 3; texts udp-ajeno
+adb shell "am start -a android.intent.action.SEND -t text/plain --es android.intent.extra.TEXT 'hysteria2://0123456789abcdef@169.58.178.186:443$HYQ' -n com.vpn360.app/com.v2ray.ang.ui.UrlSchemeActivity" >/dev/null 2>&1
+sleep 2; shot 26-udp-nuestro; sleep 3; texts udp-nuestro
+if grep -A40 "== udp-nuestro" "$D/texts.txt" | grep -q "VPN 360 UDP"; then echo "udp: aceptado OK" > "$D/udp-check.txt"; else echo "udp: NO aparece" > "$D/udp-check.txt"; fi
 
 echo "pid: $(adb shell pidof com.vpn360.app)" >> "$D/package.txt"
 adb logcat -d -v time > "$D/logcat-full.txt" 2>&1

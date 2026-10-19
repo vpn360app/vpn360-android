@@ -187,6 +187,7 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
         }
         _uiState.update { it.copy(importing = true) }
         viewModelScope.launch(Dispatchers.IO) {
+            val before = MmkvManager.decodeAllServerList().toSet()
             val ok = try {
                 val (count, countSub) = AngConfigManager.importBatchConfig(text, "", true)
                 var imported = count + countSub > 0
@@ -203,7 +204,9 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
                 false
             }
             if (ok) {
-                MmkvManager.decodeAllServerList().firstOrNull()?.let { MmkvManager.setSelectServer(it) }
+                // Use the server that was just added (a new link), otherwise the first one
+                val all = MmkvManager.decodeAllServerList()
+                (all.firstOrNull { it !in before } ?: all.firstOrNull())?.let { MmkvManager.setSelectServer(it) }
                 MmkvManager.encodeSettings(WelcomeActivity.PREF_ONBOARDED, true)
             }
             withContext(Dispatchers.Main) {
@@ -217,6 +220,17 @@ class HomeViewModel(application: Application) : BaseViewModel(application) {
     fun openCodeDialog() = _uiState.update { it.copy(codeDialogOpen = true, codeError = null) }
 
     fun closeCodeDialog() = _uiState.update { it.copy(codeDialogOpen = false, codeBusy = false, codeError = null) }
+
+    /** The code dialog also takes a pasted VPN 360 link (sent by chat), not only an access code. */
+    fun submitCodeOrLink(text: String) {
+        val value = text.trim()
+        if (value.contains("://")) {
+            closeCodeDialog()
+            onScanned(value)
+        } else {
+            activateCode(value)
+        }
+    }
 
     /** Exchanges an access code for the subscription link at the VPN 360 account server. */
     fun activateCode(rawCode: String) {

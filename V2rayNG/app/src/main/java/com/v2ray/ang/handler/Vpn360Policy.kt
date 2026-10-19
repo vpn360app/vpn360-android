@@ -24,14 +24,34 @@ object Vpn360Policy {
         return u.startsWith("$base/s/") && u.length > base.length + 3 && !u.contains(' ')
     }
 
-    /** vless://…?security=reality&pbk=<one of our keys>… */
+    private val serverHosts: Set<String> by lazy {
+        BuildConfig.VPN360_SERVER_HOSTS.split(',').map { it.trim().lowercase() }.filter { it.isNotEmpty() }.toSet()
+    }
+
+    /**
+     * vless://…?security=reality&pbk=<one of our keys>…, or
+     * hysteria2://…@<one of our servers>…?obfs=salamander&obfs-password=…&pinSHA256=… (UDP route)
+     */
     fun isOurServerLink(link: String): Boolean {
         val l = link.trim()
-        if (!l.startsWith("vless://", ignoreCase = true)) return false
         return try {
-            val uri = Uri.parse(l)
-            uri.getQueryParameter("security").equals("reality", ignoreCase = true) &&
-                uri.getQueryParameter("pbk")?.trim() in realityKeys
+            when {
+                l.startsWith("vless://", ignoreCase = true) -> {
+                    val uri = Uri.parse(l)
+                    uri.getQueryParameter("security").equals("reality", ignoreCase = true) &&
+                        uri.getQueryParameter("pbk")?.trim() in realityKeys
+                }
+
+                l.startsWith("hysteria2://", ignoreCase = true) || l.startsWith("hy2://", ignoreCase = true) -> {
+                    val uri = Uri.parse(l)
+                    uri.host?.lowercase() in serverHosts &&
+                        uri.getQueryParameter("obfs").equals("salamander", ignoreCase = true) &&
+                        !uri.getQueryParameter("obfs-password").isNullOrBlank() &&
+                        !uri.getQueryParameter("pinSHA256").isNullOrBlank()
+                }
+
+                else -> false
+            }
         } catch (e: Exception) {
             false
         }

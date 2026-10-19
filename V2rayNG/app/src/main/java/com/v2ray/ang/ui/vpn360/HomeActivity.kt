@@ -239,7 +239,7 @@ class HomeActivity : HelperBaseComponentActivity() {
                 onScan = ::scanCode,
                 onOpenCode = viewModel::openCodeDialog,
                 onCloseCode = viewModel::closeCodeDialog,
-                onSubmitCode = viewModel::activateCode,
+                onSubmitCode = viewModel::submitCodeOrLink,
                 onInfo = { startActivity(Intent(this@HomeActivity, AboutActivity::class.java)) },
                 onMyPlan = { myPlanLauncher.launch(Intent(this@HomeActivity, MyPlanActivity::class.java)) },
                 onHow = ::openWelcome,
@@ -858,7 +858,11 @@ private fun CodeDialog(busy: Boolean, error: Int?, onDismiss: () -> Unit, onSubm
                 Spacer(Modifier.height(12.dp))
                 OutlinedTextField(
                     value = code,
-                    onValueChange = { v -> code = v.uppercase().filter { it.isLetterOrDigit() || it == '-' || it == ' ' }.take(24) },
+                    onValueChange = { v ->
+                        // A pasted link is kept as is; a typed access code is normalised
+                        code = if (v.contains("://")) v.trim().take(4096)
+                        else v.uppercase().filter { it.isLetterOrDigit() || it == '-' || it == ' ' }.take(24)
+                    },
                     label = { Text(stringResource(R.string.vpn360_code_hint)) },
                     singleLine = true,
                     enabled = !busy,
