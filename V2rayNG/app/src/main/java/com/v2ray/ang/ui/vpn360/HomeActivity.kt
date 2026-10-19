@@ -829,15 +829,15 @@ private fun BottomActions(uiState: HomeUiState, onScan: () -> Unit, onOpenCode: 
                 Spacer(Modifier.width(8.dp))
                 Text(stringResource(R.string.vpn360_scan_other), color = MaterialTheme.colorScheme.secondary)
             }
-        } else {
-            TextButton(onClick = onOpenCode, modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    stringResource(R.string.vpn360_have_code),
-                    color = MaterialTheme.colorScheme.secondary,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+        }
+        // Always available: a code, or a link sent by chat, can replace or add an account
+        TextButton(onClick = onOpenCode, modifier = Modifier.fillMaxWidth()) {
+            Text(
+                stringResource(R.string.vpn360_have_code),
+                color = MaterialTheme.colorScheme.secondary,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
