@@ -68,6 +68,18 @@ SUBID=$(openssl rand -hex 8)
 printf 'PBK=%s\n' "$PBK" > "$DIR/reality.env"; chmod 600 "$DIR/reality.env"
 
 say "4/8 Creando la entrada $INBOUND_NAME en TCP $PORT"
+EXISTING=$(curl -fsS -H "Authorization: Bearer $XUI_API_TOKEN" "$PANEL/panel/api/inbounds/list" \
+  | jq -c --arg r "$INBOUND_NAME" '[.obj[]? | select(.remark==$r)] | first // empty')
+if [ -n "$EXISTING" ]; then
+  INBOUND_ID=$(echo "$EXISTING" | jq -r '.id')
+  FULL=$(curl -fsS -H "Authorization: Bearer $XUI_API_TOKEN" "$PANEL/panel/api/inbounds/get/$INBOUND_ID")
+  UUID=$(echo "$FULL" | jq -r '.obj.settings | if type=="string" then fromjson else . end | .clients[0].id')
+  PBK=$(echo "$FULL" | jq -r '.obj.streamSettings | if type=="string" then fromjson else . end | .realitySettings.settings.publicKey')
+  SID=$(echo "$FULL" | jq -r '.obj.streamSettings | if type=="string" then fromjson else . end | .realitySettings.shortIds[0]')
+  SNI=$(echo "$FULL" | jq -r '.obj.streamSettings | if type=="string" then fromjson else . end | .realitySettings.serverNames[0]')
+  printf 'PBK=%s\n' "$PBK" > "$DIR/reality.env"
+  echo "Ya existía (id $INBOUND_ID); se reutiliza."
+else
 SETTINGS=$(jq -cn --arg id "$UUID" --arg email "$TEST_USER" --arg sub "$SUBID" '{
   clients: [{id:$id, flow:"xtls-rprx-vision", email:$email, limitIp:2, totalGB:0, expiryTime:0,
              enable:true, tgId:"", subId:$sub, comment:"Cuenta de prueba", reset:0}],
@@ -87,6 +99,7 @@ RESP=$(curl -fsS -X POST -H "Authorization: Bearer $XUI_API_TOKEN" -H "Content-T
 echo "$RESP" | jq -e '.success == true' >/dev/null || { echo "$RESP" | head -c 400; echo; fail "El panel rechazó la entrada."; }
 INBOUND_ID=$(echo "$RESP" | jq -r '.obj.id')
 echo "Entrada creada (id $INBOUND_ID)."
+fi
 
 say "5/8 Ruta UDP (Hysteria2) en UDP $PORT"
 PORT="$PORT" bash <(curl -fsSL "$REPO_RAW/install-udp.sh") >"$DIR/udp-install.log" 2>&1 \
@@ -102,8 +115,8 @@ EOF
 sysctl -q -p /etc/sysctl.d/98-vpn360-bbr.conf || true
 
 say "7/8 Firewall: solo SSH, TCP $PORT y UDP $PORT"
-SSH_PORT=$(grep -Ei '^\s*Port\s+[0-9]+' /etc/ssh/sshd_config 2>/dev/null | awk '{print $2}' | head -1)
-ufw --force reset >/dev/null
+SSH_PORT=$( (grep -Ei '^\s*Port\s+[0-9]+' /etc/ssh/sshd_config 2>/dev/null || true) | awk '{print $2}' | head -1)
+ufw --force reset >/dev/null || true
 ufw default deny incoming >/dev/null
 ufw default allow outgoing >/dev/null
 ufw allow "${SSH_PORT:-22}"/tcp >/dev/null
