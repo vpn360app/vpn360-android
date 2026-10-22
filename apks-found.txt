@@ -1,0 +1,13 @@
+app/build/outputs/apk/web/release/VPN360-armeabi-v7a.apk
+app/build/outputs/apk/web/release/VPN360-x86.apk
+app/build/outputs/apk/web/release/VPN360-x86_64.apk
+app/build/outputs/apk/web/release/VPN360-universal.apk
+app/build/outputs/apk/web/release/VPN360-arm64-v8a.apk
+total 209416
+drwxr-xr-x  2 runner runner     4096 Oct 22 18:01 .
+drwxr-xr-x 11 runner runner     4096 Oct 22 17:56 ..
+-rw-r--r--  1 runner runner 33669518 Oct 22 18:01 VPN360-arm64-v8a.apk
+-rw-r--r--  1 runner runner 34173784 Oct 22 18:01 VPN360-armeabi-v7a.apk
+-rw-r--r--  1 runner runner 76532371 Oct 22 18:01 VPN360-universal.apk
+-rw-r--r--  1 runner runner 35289724 Oct 22 18:01 VPN360-x86.apk
+-rw-r--r--  1 runner runner 34758641 Oct 22 18:01 VPN360-x86_64.apk

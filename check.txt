@@ -1,0 +1,25 @@
+== out/VPN360-arm64-v8a.apk 33M
+package: name='com.vpn360.app' versionCode='4000011' versionName='1.0.10' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
+targetSdkVersion:'37'
+application-label:'VPN 360'
+native-code: 'arm64-v8a'
+== out/VPN360-armeabi-v7a.apk 33M
+package: name='com.vpn360.app' versionCode='4000011' versionName='1.0.10' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
+targetSdkVersion:'37'
+application-label:'VPN 360'
+native-code: 'armeabi-v7a'
+== out/VPN360-universal.apk 73M
+package: name='com.vpn360.app' versionCode='4000011' versionName='1.0.10' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
+targetSdkVersion:'37'
+application-label:'VPN 360'
+native-code: 'arm64-v8a' 'armeabi-v7a' 'x86' 'x86_64'
+== out/VPN360-x86.apk 34M
+package: name='com.vpn360.app' versionCode='4000011' versionName='1.0.10' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
+targetSdkVersion:'37'
+application-label:'VPN 360'
+native-code: 'x86'
+== out/VPN360-x86_64.apk 34M
+package: name='com.vpn360.app' versionCode='4000011' versionName='1.0.10' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
+targetSdkVersion:'37'
+application-label:'VPN 360'
+native-code: 'x86_64'

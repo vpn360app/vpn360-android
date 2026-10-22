@@ -1,0 +1,190 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.8.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+WARNING: The option setting 'android.usesSdkInManifest.disallowed=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: The option setting 'android.sdk.defaultTargetSdkToCompileSdkIfUnset=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: The option setting 'android.enableAppCompileTimeRClass=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: The option setting 'android.builtInKotlin=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: The option setting 'android.newDsl=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: The option setting 'android.r8.optimizedResourceShrinking=false' is deprecated.
+The current default is 'true'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: The option setting 'android.defaults.buildfeatures.resvalues=true' is deprecated.
+The current default is 'false'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+Add android.sync.suppressAgpWarnings=UNSUPPORTED_PROJECT_OPTION_USE to the gradle.properties file to suppress this warning.
+WARNING: API 'applicationVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding 
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling applicationVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+WARNING: API 'testVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding 
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling testVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+WARNING: API 'unitTestVariants' is obsolete and has been replaced with 'AndroidComponentsExtension'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+The legacy variant API is disabled by default in AGP 9.0, but can be re-enabled by adding 
+    android.newDsl=false
+to this project's gradle.properties file.
+For more information, see http://developer.android.com/build/r/new-dsl.
+
+To determine what is calling unitTestVariants, use -Pandroid.debug.obsoleteApi=true on the command line to display more information.
+Add android.sync.suppressAgpWarnings=DEPRECATED_DSL to the gradle.properties file to suppress this warning.
+WARNING: The property android.dependency.excludeLibraryComponentsFromConstraints improves project import performance for very large projects. It should be enabled to improve performance.
+To suppress this warning, add android.generateSyncIssueWhenLibraryConstraintsAreEnabled=false to gradle.properties
+Add android.sync.suppressAgpWarnings=LIBRARY_CONSTRAINTS_SHOULD_BE_DISABLED to the gradle.properties file to suppress this warning.
+WARNING: The property android.dependency.excludeLibraryComponentsFromConstraints improves project import performance for very large projects. It should be enabled to improve performance.
+To suppress this warning, add android.generateSyncIssueWhenLibraryConstraintsAreEnabled=false to gradle.properties
+Add android.sync.suppressAgpWarnings=LIBRARY_CONSTRAINTS_SHOULD_BE_DISABLED to the gradle.properties file to suppress this warning.
+WARNING: The property android.dependency.excludeLibraryComponentsFromConstraints improves project import performance for very large projects. It should be enabled to improve performance.
+To suppress this warning, add android.generateSyncIssueWhenLibraryConstraintsAreEnabled=false to gradle.properties
+Add android.sync.suppressAgpWarnings=LIBRARY_CONSTRAINTS_SHOULD_BE_DISABLED to the gradle.properties file to suppress this warning.
+WARNING: The property android.dependency.excludeLibraryComponentsFromConstraints improves project import performance for very large projects. It should be enabled to improve performance.
+To suppress this warning, add android.generateSyncIssueWhenLibraryConstraintsAreEnabled=false to gradle.properties
+Add android.sync.suppressAgpWarnings=LIBRARY_CONSTRAINTS_SHOULD_BE_DISABLED to the gradle.properties file to suppress this warning.
+WARNING: The property android.dependency.excludeLibraryComponentsFromConstraints improves project import performance for very large projects. It should be enabled to improve performance.
+To suppress this warning, add android.generateSyncIssueWhenLibraryConstraintsAreEnabled=false to gradle.properties
+Add android.sync.suppressAgpWarnings=LIBRARY_CONSTRAINTS_SHOULD_BE_DISABLED to the gradle.properties file to suppress this warning.
+WARNING: The property android.dependency.excludeLibraryComponentsFromConstraints improves project import performance for very large projects. It should be enabled to improve performance.
+To suppress this warning, add android.generateSyncIssueWhenLibraryConstraintsAreEnabled=false to gradle.properties
+Add android.sync.suppressAgpWarnings=LIBRARY_CONSTRAINTS_SHOULD_BE_DISABLED to the gradle.properties file to suppress this warning.
+WARNING: The property android.dependency.excludeLibraryComponentsFromConstraints improves project import performance for very large projects. It should be enabled to improve performance.
+To suppress this warning, add android.generateSyncIssueWhenLibraryConstraintsAreEnabled=false to gradle.properties
+Add android.sync.suppressAgpWarnings=LIBRARY_CONSTRAINTS_SHOULD_BE_DISABLED to the gradle.properties file to suppress this warning.
+WARNING: The property android.dependency.excludeLibraryComponentsFromConstraints improves project import performance for very large projects. It should be enabled to improve performance.
+To suppress this warning, add android.generateSyncIssueWhenLibraryConstraintsAreEnabled=false to gradle.properties
+Add android.sync.suppressAgpWarnings=LIBRARY_CONSTRAINTS_SHOULD_BE_DISABLED to the gradle.properties file to suppress this warning.
+WARNING: The property android.dependency.excludeLibraryComponentsFromConstraints improves project import performance for very large projects. It should be enabled to improve performance.
+To suppress this warning, add android.generateSyncIssueWhenLibraryConstraintsAreEnabled=false to gradle.properties
+Add android.sync.suppressAgpWarnings=LIBRARY_CONSTRAINTS_SHOULD_BE_DISABLED to the gradle.properties file to suppress this warning.
+WARNING: The property android.dependency.excludeLibraryComponentsFromConstraints improves project import performance for very large projects. It should be enabled to improve performance.
+To suppress this warning, add android.generateSyncIssueWhenLibraryConstraintsAreEnabled=false to gradle.properties
+Add android.sync.suppressAgpWarnings=LIBRARY_CONSTRAINTS_SHOULD_BE_DISABLED to the gradle.properties file to suppress this warning.
+WARNING: The property android.dependency.excludeLibraryComponentsFromConstraints improves project import performance for very large projects. It should be enabled to improve performance.
+To suppress this warning, add android.generateSyncIssueWhenLibraryConstraintsAreEnabled=false to gradle.properties
+Add android.sync.suppressAgpWarnings=LIBRARY_CONSTRAINTS_SHOULD_BE_DISABLED to the gradle.properties file to suppress this warning.
+WARNING: The property android.dependency.excludeLibraryComponentsFromConstraints improves project import performance for very large projects. It should be enabled to improve performance.
+To suppress this warning, add android.generateSyncIssueWhenLibraryConstraintsAreEnabled=false to gradle.properties
+Add android.sync.suppressAgpWarnings=LIBRARY_CONSTRAINTS_SHOULD_BE_DISABLED to the gradle.properties file to suppress this warning.
+w: ⚠️ Deprecated 'org.jetbrains.kotlin.android' plugin usage
+The 'org.jetbrains.kotlin.android' plugin in project ':app' is no longer required for Kotlin support since AGP 9.0.
+Solution: Remove both `android.builtInKotlin=true` and `android.newDsl=false` from `gradle.properties`, then migrate to built-in Kotlin.
+See https://kotl.in/gradle/agp-built-in-kotlin for more details.
+
+
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preWebReleaseBuild UP-TO-DATE
+> Task :app:mergeWebReleaseJniLibFolders
+> Task :app:mergeWebReleaseArtProfile
+> Task :app:mergeWebReleaseNativeLibs
+> Task :app:checkWebReleaseDuplicateClasses
+
+> Task :app:stripWebReleaseDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libgojni.so, libhev-socks5-tunnel.so, libhevsockstun.so, libimage_processing_util_jni.so, libmmkv.so, libsurface_util_jni.so. Run with --info option to learn more.
+
+> Task :app:extractWebReleaseNativeSymbolTables
+> Task :app:buildKotlinToolingMetadata
+> Task :app:mergeWebReleaseNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateWebReleaseBuildConfig
+> Task :app:expandWebReleaseL8ArtProfileWildcards
+> Task :app:generateWebReleaseResValues
+> Task :app:checkWebReleaseAarMetadata
+> Task :app:mapWebReleaseSourceSetPaths
+> Task :app:processWebReleaseNavigationResources
+> Task :app:compileWebReleaseNavigationResources
+> Task :app:extractWebReleaseSupportedLocales
+> Task :app:generateWebReleaseResources
+> Task :app:createWebReleaseCompatibleScreenManifests
+> Task :app:extractDeepLinksWebRelease
+> Task :app:generateWebReleaseLocaleConfig
+> Task :app:processWebReleaseMainManifest
+> Task :app:packageWebReleaseResources
+> Task :app:processWebReleaseManifest
+> Task :app:javaPreCompileWebRelease
+> Task :app:parseWebReleaseLocalResources
+> Task :app:mergeWebReleaseResources
+> Task :app:processWebReleaseManifestForPackage
+> Task :app:mergeWebReleaseStartupProfile
+> Task :app:generateWebReleaseAssets UP-TO-DATE
+> Task :app:desugarWebReleaseFileDependencies
+> Task :app:mergeWebReleaseAssets
+> Task :app:processWebReleaseResources
+> Task :app:mergeExtDexWebRelease
+> Task :app:extractWebReleaseVersionControlInfo
+> Task :app:extractProguardFiles
+> Task :app:compressWebReleaseAssets
+> Task :app:collectWebReleaseDependencies
+> Task :app:sdkWebReleaseDependencyData
+> Task :app:validateSigningWebRelease
+> Task :app:writeWebReleaseAppMetadata
+> Task :app:writeWebReleaseSigningConfigVersions
+> Task :app:optimizeWebReleaseResources
+> Task :app:compileWebReleaseKotlin
+w: file:///home/runner/work/vpn360-android/vpn360-android/V2rayNG/app/src/main/java/com/v2ray/ang/handler/SettingsManager.kt:511:25 'var pinSHA256: String?' is deprecated. Use pinnedCA256.
+w: file:///home/runner/work/vpn360-android/vpn360-android/V2rayNG/app/src/main/java/com/v2ray/ang/handler/SettingsManager.kt:514:43 'var pinSHA256: String?' is deprecated. Use pinnedCA256.
+w: file:///home/runner/work/vpn360-android/vpn360-android/V2rayNG/app/src/main/java/com/v2ray/ang/handler/SettingsManager.kt:515:21 'var pinSHA256: String?' is deprecated. Use pinnedCA256.
+w: file:///home/runner/work/vpn360-android/vpn360-android/V2rayNG/app/src/main/java/com/v2ray/ang/ui/main/MainGroupTab.kt:33:5 'fun ScrollableTabRow(selectedTabIndex: Int, modifier: Modifier = ..., containerColor: Color = ..., contentColor: Color = ..., edgePadding: Dp = ..., indicator: ComposableFunction1<List<TabPosition>, Unit> = ..., divider: ComposableFunction0<Unit> = ..., tabs: ComposableFunction0<Unit>): Unit' is deprecated. Replaced with PrimaryScrollableTabRow and SecondaryScrollableTabRow tab variants.
+w: file:///home/runner/work/vpn360-android/vpn360-android/V2rayNG/app/src/main/java/com/v2ray/ang/ui/main/MainGroupTab.kt:41:37 'fun Modifier.tabIndicatorOffset(currentTabPosition: TabPosition): Modifier' is deprecated. Solely for use alongside deprecated TabRowDefaults.Indicator method. For recommended PrimaryIndicator and SecondaryIndicator methods, please use TabIndicatorScope.tabIndicatorOffset method.
+w: file:///home/runner/work/vpn360-android/vpn360-android/V2rayNG/app/src/main/java/com/v2ray/ang/ui/routing/RoutingSettingActivity.kt:386:43 Elvis operator (?:) always returns the left operand of non-nullable type 'Boolean'.
+w: file:///home/runner/work/vpn360-android/vpn360-android/V2rayNG/app/src/main/java/com/v2ray/ang/ui/server/ServerCustomConfigActivity.kt:140:44 Unnecessary safe call on a non-null receiver of type 'ProfileItem'.
+w: file:///home/runner/work/vpn360-android/vpn360-android/V2rayNG/app/src/main/java/com/v2ray/ang/ui/server/ServerCustomConfigActivity.kt:142:38 Unnecessary safe call on a non-null receiver of type 'ProfileItem'.
+w: file:///home/runner/work/vpn360-android/vpn360-android/V2rayNG/app/src/main/java/com/v2ray/ang/ui/server/ServerCustomConfigActivity.kt:143:42 Unnecessary safe call on a non-null receiver of type 'ProfileItem'.
+w: file:///home/runner/work/vpn360-android/vpn360-android/V2rayNG/app/src/main/java/com/v2ray/ang/util/HttpUtil.kt:128:37 Unnecessary safe call on a non-null receiver of type 'ResponseBody'.
+w: file:///home/runner/work/vpn360-android/vpn360-android/V2rayNG/app/src/main/java/com/v2ray/ang/util/HttpUtil.kt:196:45 Unnecessary safe call on a non-null receiver of type 'ResponseBody'.
+w: file:///home/runner/work/vpn360-android/vpn360-android/V2rayNG/app/src/main/java/com/v2ray/ang/util/HttpUtil.kt:292:42 Elvis operator (?:) always returns the left operand of non-nullable type 'ResponseBody'.
+
+> Task :app:compileWebReleaseJavaWithJavac
+> Task :app:dexBuilderWebRelease
+> Task :app:mergeWebReleaseGlobalSynthetics
+> Task :app:generateWebReleaseLintVitalReportModel
+> Task :app:mergeDexWebRelease
+> Task :app:processWebReleaseJavaRes
+> Task :app:mergeWebReleaseJavaResource
+> Task :app:l8DexDesugarLibWebRelease
+> Task :app:compileWebReleaseArtProfile
+> Task :app:lintVitalAnalyzeWebRelease
+> Task :app:lintVitalReportWebRelease
+> Task :app:lintVitalWebRelease
+> Task :app:packageWebRelease
+> Task :app:createWebReleaseApkListingFileRedirect
+> Task :app:assembleWebRelease
+
+[Incubating] Problems report is available at: file:///home/runner/work/vpn360-android/vpn360-android/V2rayNG/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.8.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 3m 45s
+55 actionable tasks: 55 executed
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.8.1/userguide/configuration_cache_enabling.html
