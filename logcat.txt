@@ -1,0 +1,300 @@
+10-22 18:06:56.299 D/CoreBackPreview( 3619): Window{b7d5713 u0 com.vpn360.app/com.v2ray.ang.ui.vpn360.WelcomeActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@4f44305, mPriority=0, mIsAnimationCallback=false}
+10-22 18:06:56.386 I/ActivityTaskManager( 3619): Displayed com.vpn360.app/com.v2ray.ang.ui.vpn360.WelcomeActivity for user 0: +204ms
+10-22 18:06:56.389 V/WindowManager( 3619): Sent Transition #14 createdAt=10-22 18:06:56.175 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=7 displayId=0 isRunning=true baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity } baseActivity=ComponentInfo{com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity} topActivity=ComponentInfo{com.vpn360.app/com.v2ray.ang.ui.vpn360.WelcomeActivity} origActivity=null realActivity=ComponentInfo{com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity} numActivities=2 lastActiveTime=250311 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{5509077 Task{7d002b9 #7 type=standard A=10192:com.vpn360.app}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=null topActivityInfo=ActivityInfo{2603668 com.v2ray.ang.ui.vpn360.WelcomeActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+10-22 18:06:56.389 V/WindowManager( 3619):     info={id=14 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{null m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{78e8f38 u0 com.vpn360.app/com.v2ray.ang.ui.vpn360.WelcomeActivity)/@0x34a3f5a sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) d=-1->0 r=-1->0:-1},{null m=TO_BACK f=FILLS_TASK leash=Surface(name=ActivityRecord{656bf8b u0 com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity)/@0x26689ab sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+10-22 18:06:56.391 V/WindowManagerShell( 3805): onTransitionReady android.os.BinderProxy@1afa437: {id=14 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{null m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{78e8f38 u0 com.vpn360.app/com.v2ray.ang.ui.vpn360.WelcomeActivity)/@0x3a6a6c2 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) d=-1->0 r=-1->0:-1},{null m=TO_BACK f=FILLS_TASK leash=Surface(name=ActivityRecord{656bf8b u0 com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity)/@0xd04cd3 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+10-22 18:06:56.392 V/WindowManagerShell( 3805): Transition doesn't have explicit remote, search filters for match for {id=14 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{null m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{78e8f38 u0 com.vpn360.app/com.v2ray.ang.ui.vpn360.WelcomeActivity)/@0x3a6a6c2 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) d=-1->0 r=-1->0:-1},{null m=TO_BACK f=FILLS_TASK leash=Surface(name=ActivityRecord{656bf8b u0 com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity)/@0xd04cd3 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+10-22 18:06:56.392 V/WindowManagerShell( 3805): start default transition animation, info = {id=14 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{null m=OPEN f=FILLS_TASK leash=Surface(name=ActivityRecord{78e8f38 u0 com.vpn360.app/com.v2ray.ang.ui.vpn360.WelcomeActivity)/@0x3a6a6c2 sb=Rect(0, 0 - 0, 0) eb=Rect(0, 0 - 1080, 2400) d=-1->0 r=-1->0:-1},{null m=TO_BACK f=FILLS_TASK leash=Surface(name=ActivityRecord{656bf8b u0 com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity)/@0xd04cd3 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+10-22 18:06:56.556 I/ImeTracker( 3619): com.vpn360.app:11876ab1: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+10-22 18:06:56.556 I/ImeTracker( 3619): com.vpn360.app:11876ab1: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-22 18:06:56.562 I/GoogleInputMethodService( 4383): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.vpn360.app fieldId=0 fieldName=null extras=null}, false)
+10-22 18:06:59.570 V/WindowManagerShell( 3805): onTransitionReady android.os.BinderProxy@fa4472: {id=15 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{null m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{78e8f38 u0 com.vpn360.app/com.v2ray.ang.ui.vpn360.WelcomeActivity)/@0xd9610c3 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{null m=TO_FRONT f=FILLS_TASK leash=Surface(name=ActivityRecord{656bf8b u0 com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity)/@0xbd2bd40 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+10-22 18:06:59.571 V/WindowManager( 3619):     info={id=15 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{null m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{78e8f38 u0 com.vpn360.app/com.v2ray.ang.ui.vpn360.WelcomeActivity)/@0x34a3f5a sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{null m=TO_FRONT f=FILLS_TASK leash=Surface(name=ActivityRecord{656bf8b u0 com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity)/@0x26689ab sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+10-22 18:06:59.572 V/WindowManagerShell( 3805): Transition doesn't have explicit remote, search filters for match for {id=15 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{null m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{78e8f38 u0 com.vpn360.app/com.v2ray.ang.ui.vpn360.WelcomeActivity)/@0xd9610c3 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{null m=TO_FRONT f=FILLS_TASK leash=Surface(name=ActivityRecord{656bf8b u0 com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity)/@0xbd2bd40 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+10-22 18:06:59.573 V/WindowManagerShell( 3805): start default transition animation, info = {id=15 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{null m=CLOSE f=FILLS_TASK leash=Surface(name=ActivityRecord{78e8f38 u0 com.vpn360.app/com.v2ray.ang.ui.vpn360.WelcomeActivity)/@0xd9610c3 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0},{null m=TO_FRONT f=FILLS_TASK leash=Surface(name=ActivityRecord{656bf8b u0 com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity)/@0xbd2bd40 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}]}
+10-22 18:06:59.635 I/ImeTracker( 3619): com.vpn360.app:ff668bd6: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+10-22 18:06:59.635 I/ImeTracker( 3619): com.vpn360.app:ff668bd6: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-22 18:06:59.665 I/GoogleInputMethodService( 4383): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.vpn360.app fieldId=0 fieldName=null extras=null}, false)
+10-22 18:06:59.785 D/CoreBackPreview( 3619): Window{b7d5713 u0 com.vpn360.app/com.v2ray.ang.ui.vpn360.WelcomeActivity}: Setting back callback null
+10-22 18:06:59.786 W/InputManager-JNI( 3619): Input channel object 'b7d5713 com.vpn360.app/com.v2ray.ang.ui.vpn360.WelcomeActivity (client)' was disposed without first being removed with the input manager!
+10-22 18:07:01.519 I/ActivityTaskManager( 3619): START u0 {act=android.intent.action.SEND typ=text/plain flg=0x10000000 cmp=com.vpn360.app/com.v2ray.ang.ui.UrlSchemeActivity (has extras)} with LAUNCH_MULTIPLE from uid 0 (BAL_ALLOW_ALLOWLISTED_UID) result code=0
+10-22 18:07:01.519 V/WindowManagerShell( 3805): Transition requested: android.os.BinderProxy@e155ecc TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=7 displayId=0 isRunning=true baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity } baseActivity=ComponentInfo{com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity} topActivity=ComponentInfo{com.vpn360.app/com.v2ray.ang.ui.UrlSchemeActivity} origActivity=null realActivity=ComponentInfo{com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity} numActivities=2 lastActiveTime=255652 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@fc3b515} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=null topActivityInfo=ActivityInfo{abeb02a com.v2ray.ang.ui.UrlSchemeActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+10-22 18:07:01.550 I/ActivityTaskManager( 3619): START u0 {flg=0x14000000 cmp=com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity (has extras)} with LAUNCH_SINGLE_TASK from uid 10192 (BAL_ALLOW_VISIBLE_WINDOW) result code=3
+10-22 18:07:01.550 D/WindowManagerShell( 3805): onActivityRestartAttempt: ComponentInfo{com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity}
+10-22 18:07:01.551 W/ActivityTaskManager( 3619): Duplicate finish request for r=ActivityRecord{5c79a5e u0 com.vpn360.app/com.v2ray.ang.ui.UrlSchemeActivity t7 f}}
+10-22 18:07:01.561 E/com.vpn360.app( 6733): Failed to decode standard base64
+10-22 18:07:01.561 E/com.vpn360.app( 6733): java.lang.IllegalArgumentException: bad base-64
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:163)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:138)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:120)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.tryDecodeBase64(Utils.kt:97)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.decode(Utils.kt:84)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.handler.Vpn360Policy.filter(Vpn360Policy.kt:73)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeViewModel.importConfig(HomeViewModel.kt:184)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeActivity.handleImportIntent(HomeActivity.kt:189)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeActivity.onNewIntent(HomeActivity.kt:183)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.Activity.performNewIntent(Activity.java:8613)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.Instrumentation.callActivityOnNewIntent(Instrumentation.java:1556)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.Instrumentation.callActivityOnNewIntent(Instrumentation.java:1569)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.ActivityThread.deliverNewIntents(ActivityThread.java:3962)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.ActivityThread.handleNewIntent(ActivityThread.java:3969)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.servertransaction.NewIntentItem.execute(NewIntentItem.java:56)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.servertransaction.ActivityTransactionItem.execute(ActivityTransactionItem.java:45)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.servertransaction.TransactionExecutor.executeCallbacks(TransactionExecutor.java:139)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:96)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2443)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.os.Handler.dispatchMessage(Handler.java:106)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.os.Looper.loopOnce(Looper.java:205)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.os.Looper.loop(Looper.java:294)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.ActivityThread.main(ActivityThread.java:8177)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at java.lang.reflect.Method.invoke(Native Method)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:552)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:971)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): Failed to decode URL-safe base64
+10-22 18:07:01.561 E/com.vpn360.app( 6733): java.lang.IllegalArgumentException: bad base-64
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:163)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:138)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:120)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.tryDecodeBase64(Utils.kt:102)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.decode(Utils.kt:84)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.handler.Vpn360Policy.filter(Vpn360Policy.kt:73)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeViewModel.importConfig(HomeViewModel.kt:184)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeActivity.handleImportIntent(HomeActivity.kt:189)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeActivity.onNewIntent(HomeActivity.kt:183)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.Activity.performNewIntent(Activity.java:8613)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.Instrumentation.callActivityOnNewIntent(Instrumentation.java:1556)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.Instrumentation.callActivityOnNewIntent(Instrumentation.java:1569)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.ActivityThread.deliverNewIntents(ActivityThread.java:3962)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.ActivityThread.handleNewIntent(ActivityThread.java:3969)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.servertransaction.NewIntentItem.execute(NewIntentItem.java:56)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.servertransaction.ActivityTransactionItem.execute(ActivityTransactionItem.java:45)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.servertransaction.TransactionExecutor.executeCallbacks(TransactionExecutor.java:139)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:96)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2443)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.os.Handler.dispatchMessage(Handler.java:106)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.os.Looper.loopOnce(Looper.java:205)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.os.Looper.loop(Looper.java:294)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.ActivityThread.main(ActivityThread.java:8177)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at java.lang.reflect.Method.invoke(Native Method)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:552)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:971)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): Failed to decode standard base64
+10-22 18:07:01.561 E/com.vpn360.app( 6733): java.lang.IllegalArgumentException: bad base-64
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:163)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:138)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:120)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.tryDecodeBase64(Utils.kt:97)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.decode(Utils.kt:84)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.handler.Vpn360Policy.filter(Vpn360Policy.kt:73)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeViewModel.importConfig(HomeViewModel.kt:184)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeActivity.handleImportIntent(HomeActivity.kt:189)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeActivity.onNewIntent(HomeActivity.kt:183)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.Activity.performNewIntent(Activity.java:8613)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.Instrumentation.callActivityOnNewIntent(Instrumentation.java:1556)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.Instrumentation.callActivityOnNewIntent(Instrumentation.java:1569)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.ActivityThread.deliverNewIntents(ActivityThread.java:3962)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.ActivityThread.handleNewIntent(ActivityThread.java:3969)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.servertransaction.NewIntentItem.execute(NewIntentItem.java:56)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.servertransaction.ActivityTransactionItem.execute(ActivityTransactionItem.java:45)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.servertransaction.TransactionExecutor.executeCallbacks(TransactionExecutor.java:139)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:96)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2443)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.os.Handler.dispatchMessage(Handler.java:106)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.os.Looper.loopOnce(Looper.java:205)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.os.Looper.loop(Looper.java:294)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.ActivityThread.main(ActivityThread.java:8177)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at java.lang.reflect.Method.invoke(Native Method)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:552)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:971)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): Failed to decode URL-safe base64
+10-22 18:07:01.561 E/com.vpn360.app( 6733): java.lang.IllegalArgumentException: bad base-64
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:163)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:138)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:120)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.tryDecodeBase64(Utils.kt:102)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.decode(Utils.kt:84)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.handler.Vpn360Policy.filter(Vpn360Policy.kt:73)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeViewModel.importConfig(HomeViewModel.kt:184)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeActivity.handleImportIntent(HomeActivity.kt:189)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeActivity.onNewIntent(HomeActivity.kt:183)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.Activity.performNewIntent(Activity.java:8613)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.Instrumentation.callActivityOnNewIntent(Instrumentation.java:1556)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.Instrumentation.callActivityOnNewIntent(Instrumentation.java:1569)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.ActivityThread.deliverNewIntents(ActivityThread.java:3962)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.ActivityThread.handleNewIntent(ActivityThread.java:3969)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.servertransaction.NewIntentItem.execute(NewIntentItem.java:56)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.servertransaction.ActivityTransactionItem.execute(ActivityTransactionItem.java:45)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.servertransaction.TransactionExecutor.executeCallbacks(TransactionExecutor.java:139)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.servertransaction.TransactionExecutor.execute(TransactionExecutor.java:96)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2443)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.os.Handler.dispatchMessage(Handler.java:106)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.os.Looper.loopOnce(Looper.java:205)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.os.Looper.loop(Looper.java:294)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at android.app.ActivityThread.main(ActivityThread.java:8177)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at java.lang.reflect.Method.invoke(Native Method)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:552)
+10-22 18:07:01.561 E/com.vpn360.app( 6733): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:971)
+10-22 18:07:01.608 I/ImeTracker( 3619): com.vpn360.app:8ccaebc8: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_SAME_WINDOW_FOCUSED_WITHOUT_EDITOR
+10-22 18:07:01.608 I/ImeTracker( 3619): com.vpn360.app:8ccaebc8: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-22 18:07:01.620 V/WindowManager( 3619): Sent Transition #16 createdAt=10-22 18:07:01.516 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=7 displayId=0 isRunning=true baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity } baseActivity=ComponentInfo{com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity} topActivity=ComponentInfo{com.vpn360.app/com.v2ray.ang.ui.UrlSchemeActivity} origActivity=null realActivity=ComponentInfo{com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity} numActivities=2 lastActiveTime=255652 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{5509077 Task{7d002b9 #7 type=standard A=10192:com.vpn360.app}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=null topActivityInfo=ActivityInfo{7a297a4 com.v2ray.ang.ui.UrlSchemeActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+10-22 18:07:01.629 I/GoogleInputMethodService( 4383): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.vpn360.app fieldId=0 fieldName=null extras=null}, false)
+10-22 18:07:03.920 W/NotificationService( 3619): Toast already killed. pkg=com.vpn360.app token=android.os.BinderProxy@fbf373c
+10-22 18:07:06.893 D/AndroidRuntime( 9010): >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+10-22 18:07:06.896 I/AndroidRuntime( 9010): Using default boot image
+10-22 18:07:06.896 I/AndroidRuntime( 9010): Leaving lock profiling enabled
+10-22 18:07:06.975 D/AndroidRuntime( 9010): Calling main entry com.android.commands.uiautomator.Launcher
+10-22 18:07:08.010 D/AndroidRuntime( 9010): Shutting down VM
+10-22 18:07:08.928 I/ActivityTaskManager( 3619): START u0 {act=android.intent.action.SEND typ=text/plain flg=0x10000000 cmp=com.vpn360.app/com.v2ray.ang.ui.UrlSchemeActivity (has extras)} with LAUNCH_MULTIPLE from uid 0 (BAL_ALLOW_ALLOWLISTED_UID) result code=0
+10-22 18:07:08.928 V/WindowManagerShell( 3805): Transition requested: android.os.BinderProxy@99b1f41 TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=7 displayId=0 isRunning=true baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity } baseActivity=ComponentInfo{com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity} topActivity=ComponentInfo{com.vpn360.app/com.v2ray.ang.ui.UrlSchemeActivity} origActivity=null realActivity=ComponentInfo{com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity} numActivities=2 lastActiveTime=263053 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@7d84ce6} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=null topActivityInfo=ActivityInfo{e6b0227 com.v2ray.ang.ui.UrlSchemeActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+10-22 18:07:08.952 I/ActivityTaskManager( 3619): START u0 {flg=0x14000000 cmp=com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity (has extras)} with LAUNCH_SINGLE_TASK from uid 10192 (BAL_ALLOW_VISIBLE_WINDOW) result code=3
+10-22 18:07:08.952 D/WindowManagerShell( 3805): onActivityRestartAttempt: ComponentInfo{com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity}
+10-22 18:07:08.952 W/ActivityTaskManager( 3619): Duplicate finish request for r=ActivityRecord{7f88bcc u0 com.vpn360.app/com.v2ray.ang.ui.UrlSchemeActivity t7 f}}
+10-22 18:07:08.961 E/com.vpn360.app( 6733): Failed to decode standard base64
+10-22 18:07:08.961 E/com.vpn360.app( 6733): java.lang.IllegalArgumentException: bad base-64
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:163)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:138)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:120)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.tryDecodeBase64(Utils.kt:97)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.decode(Utils.kt:84)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at com.v2ray.ang.handler.AngConfigManager.importBatchConfig(AngConfigManager.kt:186)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeViewModel$importConfig$2.invokeSuspend(HomeViewModel.kt:192)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:798)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): Failed to decode URL-safe base64
+10-22 18:07:08.961 E/com.vpn360.app( 6733): java.lang.IllegalArgumentException: bad base-64
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:163)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:138)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:120)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.tryDecodeBase64(Utils.kt:102)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.decode(Utils.kt:84)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at com.v2ray.ang.handler.AngConfigManager.importBatchConfig(AngConfigManager.kt:186)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeViewModel$importConfig$2.invokeSuspend(HomeViewModel.kt:192)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:798)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): Failed to decode standard base64
+10-22 18:07:08.961 E/com.vpn360.app( 6733): java.lang.IllegalArgumentException: bad base-64
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:163)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:138)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:120)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.tryDecodeBase64(Utils.kt:97)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.decode(Utils.kt:84)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at com.v2ray.ang.handler.AngConfigManager.importBatchConfig(AngConfigManager.kt:186)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeViewModel$importConfig$2.invokeSuspend(HomeViewModel.kt:192)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:798)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): Failed to decode URL-safe base64
+10-22 18:07:08.961 E/com.vpn360.app( 6733): java.lang.IllegalArgumentException: bad base-64
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:163)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:138)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:120)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.tryDecodeBase64(Utils.kt:102)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.decode(Utils.kt:84)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at com.v2ray.ang.handler.AngConfigManager.importBatchConfig(AngConfigManager.kt:186)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeViewModel$importConfig$2.invokeSuspend(HomeViewModel.kt:192)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:798)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+10-22 18:07:08.961 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+10-22 18:07:08.963 I/MMKV    ( 6733): <MemoryFile.cpp:98::open> open fd[0x60], /data/user/0/com.vpn360.app/files/mmkv/PROFILE_FULL_CONFIG
+10-22 18:07:08.964 I/MMKV    ( 6733): <MemoryFile.cpp:203::mmap> mmap to address [0x70b417d02000], oldPtr [0x0], [/data/user/0/com.vpn360.app/files/mmkv/PROFILE_FULL_CONFIG]
+10-22 18:07:08.964 I/MMKV    ( 6733): <MemoryFile.cpp:98::open> open fd[0x68], /data/user/0/com.vpn360.app/files/mmkv/PROFILE_FULL_CONFIG.crc
+10-22 18:07:08.964 I/MMKV    ( 6733): <MemoryFile.cpp:203::mmap> mmap to address [0x70b417d01000], oldPtr [0x0], [/data/user/0/com.vpn360.app/files/mmkv/PROFILE_FULL_CONFIG.crc]
+10-22 18:07:08.965 E/com.vpn360.app( 6733): Failed to decode standard base64
+10-22 18:07:08.965 E/com.vpn360.app( 6733): java.lang.IllegalArgumentException: bad base-64
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:163)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:138)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:120)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.tryDecodeBase64(Utils.kt:97)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.decode(Utils.kt:84)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at com.v2ray.ang.handler.AngConfigManager.importBatchConfig(AngConfigManager.kt:196)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeViewModel$importConfig$2.invokeSuspend(HomeViewModel.kt:192)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:798)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): Failed to decode URL-safe base64
+10-22 18:07:08.965 E/com.vpn360.app( 6733): java.lang.IllegalArgumentException: bad base-64
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:163)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:138)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:120)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.tryDecodeBase64(Utils.kt:102)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.decode(Utils.kt:84)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at com.v2ray.ang.handler.AngConfigManager.importBatchConfig(AngConfigManager.kt:196)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeViewModel$importConfig$2.invokeSuspend(HomeViewModel.kt:192)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:798)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+10-22 18:07:08.965 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): Failed to decode standard base64
+10-22 18:07:08.966 E/com.vpn360.app( 6733): java.lang.IllegalArgumentException: bad base-64
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:163)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:138)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:120)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.tryDecodeBase64(Utils.kt:97)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.decode(Utils.kt:84)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at com.v2ray.ang.handler.AngConfigManager.importBatchConfig(AngConfigManager.kt:196)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeViewModel$importConfig$2.invokeSuspend(HomeViewModel.kt:192)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:798)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): Failed to decode URL-safe base64
+10-22 18:07:08.966 E/com.vpn360.app( 6733): java.lang.IllegalArgumentException: bad base-64
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:163)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:138)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at android.util.Base64.decode(Base64.java:120)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.tryDecodeBase64(Utils.kt:102)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at com.v2ray.ang.util.Utils.decode(Utils.kt:84)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at com.v2ray.ang.handler.AngConfigManager.importBatchConfig(AngConfigManager.kt:196)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at com.v2ray.ang.ui.vpn360.HomeViewModel$importConfig$2.invokeSuspend(HomeViewModel.kt:192)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:798)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+10-22 18:07:08.966 E/com.vpn360.app( 6733): 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+10-22 18:07:09.039 I/ImeTracker( 3619): com.vpn360.app:8a495af: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_SAME_WINDOW_FOCUSED_WITHOUT_EDITOR
+10-22 18:07:09.039 I/ImeTracker( 3619): com.vpn360.app:8a495af: onCancelled at PHASE_SERVER_SHOULD_HIDE
+10-22 18:07:09.052 I/GoogleInputMethodService( 4383): GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x0 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.vpn360.app fieldId=0 fieldName=null extras=null}, false)
+10-22 18:07:09.066 V/WindowManager( 3619): Sent Transition #17 createdAt=10-22 18:07:08.917 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=7 displayId=0 isRunning=true baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity } baseActivity=ComponentInfo{com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity} topActivity=ComponentInfo{com.vpn360.app/com.v2ray.ang.ui.UrlSchemeActivity} origActivity=null realActivity=ComponentInfo{com.vpn360.app/com.v2ray.ang.ui.vpn360.HomeActivity} numActivities=2 lastActiveTime=263053 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{5509077 Task{7d002b9 #7 type=standard A=10192:com.vpn360.app}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=null topActivityInfo=ActivityInfo{1b169f6 com.v2ray.ang.ui.UrlSchemeActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+10-22 18:07:14.282 D/AndroidRuntime( 9045): >>>>>> START com.android.internal.os.RuntimeInit uid 0 <<<<<<
+10-22 18:07:14.286 I/AndroidRuntime( 9045): Using default boot image
+10-22 18:07:14.286 I/AndroidRuntime( 9045): Leaving lock profiling enabled
+10-22 18:07:14.362 D/AndroidRuntime( 9045): Calling main entry com.android.commands.uiautomator.Launcher
+10-22 18:07:15.385 D/AndroidRuntime( 9045): Shutting down VM

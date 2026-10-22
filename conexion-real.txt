@@ -1,0 +1,2 @@
+antes de conectar: ip publica distinta al servidor = no (vacia=si)
+conexion real: OK - con la VPN encendida, internet sale por el servidor VPN 360

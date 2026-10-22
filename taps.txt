@@ -1,0 +1,21 @@
+tap 'Empezar' found at 540,2082
+tap 'Tengo un código de acceso' found at 540,2221
+tap 'Activar' found at 775,1112
+tap 'Cancelar' found at 528,1180
+tap 'Idioma' found at 870,212
+tap 'English' found at 540,1784
+tap 'Language' found at 829,212
+tap 'Русский' found at 540,1984
+tap 'Язык' found at 828,212
+tap 'Español' found at 540,1584
+tap 'Menú' found at 996,212
+tap 'Información' found at 733,611
+tap 'Buscar actualizaciones' found at 540,970
+tap 'Pagar con Mercado Pago' found at 540,1522
+tap 'Menú' found at 996,212
+tap 'Mi plan' found at 694,359
+tap 'Menú' found at 996,212
+tap 'Cómo funciona y planes' found at 830,485
+tap 'Conectar VPN' found at 540,1099
+tap 'Aceptar' found at 882,1520
+tap 'Desconectar VPN' found at 540,1099

@@ -1,0 +1,4 @@
+    versionCode=4000011 minSdk=24 targetSdk=37
+    versionName=1.0.10
+screen 1080 x 2400
+pid: 6733
